@@ -12,7 +12,6 @@ pragma solidity ^0.4.24;
  * @title SafeMath
  * @dev   Unsigned math operations with safety checks that revert on error
  */
- 
 library SafeMath {
     /**
     * @dev Multiplies two unsigned integers, reverts on overflow.
@@ -34,7 +33,6 @@ library SafeMath {
         require(b > 0,"Calculation error");
         uint256 c = a / b;
         // assert(a == b * c + a % b); // There is no case in which this doesn't hold
-
         return c;
     }
 
@@ -44,7 +42,6 @@ library SafeMath {
     function sub(uint256 a, uint256 b) internal pure returns (uint256){
         require(b <= a,"Calculation error");
         uint256 c = a - b;
-
         return c;
     }
 
@@ -54,7 +51,6 @@ library SafeMath {
     function add(uint256 a, uint256 b) internal pure returns (uint256){
         uint256 c = a + b;
         require(c >= a,"Calculation error");
-
         return c;
     }
 
@@ -99,8 +95,8 @@ interface IERC20 {
     uint8   private _decimals;
     uint256 private _totalSupply;
     bool    public  _lockStatus = false;
-    address private _tokenPoolAddress;
-    address private _purchaseableTokensAddress;
+    address private _tokenPoolAddress;              // Address from where Staked Tokens will be placed.
+    address private _purchaseableTokensAddress;     // Address From where Toekns will be placed.
     uint256 private _purchaseableTokens;
     uint256 private _tokenPriceTRX;
     
@@ -386,13 +382,18 @@ interface IERC20 {
 
   // Penalty Percentage
   uint256 private _penaltyPercentage;
-
+  
   // Withdraw Penalty
   uint256 private _withdrawTimeElapsePenalty;
 
-
   // penalty amount after staking time
   uint256 private _penaltyAmountAfterStakingTime;
+  
+  //Referral Percentage
+  uint256 private _referralPercentage;
+  
+  // varaiable for referral amount
+  uint256 _referralAmount = 0;
 
   // variable to show rewards
   uint256 private _rewards;
@@ -482,6 +483,30 @@ interface IERC20 {
      return _withdrawTimeElapsePenalty;
   }
 
+  //function to set Referral percentage
+  function setReferralPercentage(uint256 referralPercentage) public onlyOwner returns(bool){
+      require(referralPercentage > 0, "Invalid Percentage");
+      _referralPercentage = referralPercentage;
+      return true;
+  } 
+  
+  // function to get Referral percentage
+  function getReferralPercentage() public view returns(uint256){
+     return _referralPercentage;
+  }
+  
+  //function to set Referral amount
+  function setReferralAmount(uint256 referralAmount) public onlyOwner returns(bool){
+     require(referralAmount > 0, "Invalid Amount");
+     _referralAmount = referralAmount;
+     return true;
+  } 
+  
+  // function to get Referral amount
+  function getReferralAmount() public view returns(uint256){
+    return _referralAmount;
+  }
+  
   // function to withdraw Funds by owner only
   function withdrawTRX() external onlyOwner returns(bool){
     msg.sender.transfer(address(this).balance);
@@ -573,7 +598,7 @@ interface IERC20 {
   // function for withdrawing staked tokens
   function withdrawStakedTokens(uint256 stakingId) public returns(bool){
     require(_stakerAddress[stakingId] == msg.sender,"No staked token found on this address and ID");
-    require(_usersTokens[stakingId] <= _usersTokens[msg.sender]);
+    require(_usersTokens[stakingId] <= _usersTokens[stakingId]);
     _TokenTransactionstatus[stakingId] = true;
     _transfer(_tokenPoolAddress,msg.sender,_usersTokens[stakingId]);
     return true;
