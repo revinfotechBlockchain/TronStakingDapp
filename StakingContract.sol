@@ -12,7 +12,6 @@ pragma solidity ^0.4.24;
  * @title SafeMath
  * @dev   Unsigned math operations with safety checks that revert on error
  */
- 
 library SafeMath {
     /**
     * @dev Multiplies two unsigned integers, reverts on overflow.
@@ -34,7 +33,6 @@ library SafeMath {
         require(b > 0,"Calculation error");
         uint256 c = a / b;
         // assert(a == b * c + a % b); // There is no case in which this doesn't hold
-
         return c;
     }
 
@@ -44,7 +42,6 @@ library SafeMath {
     function sub(uint256 a, uint256 b) internal pure returns (uint256){
         require(b <= a,"Calculation error");
         uint256 c = a - b;
-
         return c;
     }
 
@@ -54,7 +51,6 @@ library SafeMath {
     function add(uint256 a, uint256 b) internal pure returns (uint256){
         uint256 c = a + b;
         require(c >= a,"Calculation error");
-
         return c;
     }
 
@@ -99,16 +95,18 @@ interface IERC20 {
     uint8   private _decimals;
     uint256 private _totalSupply;
     bool    public  _lockStatus = false;
-    address private _tokenPoolAddress;
-    address private _purchaseableTokensAddress;
+    address private _tokenPoolAddress;              // Address from where Staked Tokens will be placed.
+    address private _purchaseableTokensAddress;     // Address From where Toekns will be placed.
     uint256 private _purchaseableTokens;
     uint256 private _tokenPriceTRX;
+    address private _referralAddress;                       // varaiable for referral amount
+    uint256 private _claimTokens;    //number of tokens per claim
     
     mapping (address => uint256) private _balances;
 
     mapping (address => mapping (address => uint256)) private _allowed;
 
-    constructor (string memory name, string memory symbol, uint8 decimals, uint256 totalSupply, address owner, address tokenPoolAddress) public {
+    constructor (string memory name, string memory symbol, uint8 decimals, uint256 totalSupply, address owner, address tokenPoolAddress, address referralAddress) public {
         _name = name;
         _symbol = symbol;
         _decimals = decimals;
@@ -116,6 +114,7 @@ interface IERC20 {
         _balances[owner] = _totalSupply;
         _owner = owner;
         _tokenPoolAddress = tokenPoolAddress;
+        _referralAddress = referralAddress;
     }
  
      /*
@@ -378,29 +377,44 @@ interface IERC20 {
   // Mappinng for users with id => address End Time
   mapping (uint256 => uint256) private _stakingEndTime;
 
-  // Mappinng for users with id => address End Time
-  mapping (uint256 => bool) private _TokenTransactionstatus;
+  // Mappinng for users with id => address Status
+  mapping (uint256 => bool) private _TokenTransactionstatus;    
+
+  // Mapping for referral address with user
+  mapping (address => address) private _ReferalList;  
+
+  // Mappinng for referral address withdraw status
+  mapping (address => bool) private _ReferalStatus;
+
+  // Mappinng for Blacklisted bitAddresses
+  mapping (string => bool) private _bitAddresses;
 
   // Reward Percentage
   uint256 private _rewardPercentage;
 
   // Penalty Percentage
   uint256 private _penaltyPercentage;
-
+  
   // Withdraw Penalty
   uint256 private _withdrawTimeElapsePenalty;
 
-
   // penalty amount after staking time
   uint256 private _penaltyAmountAfterStakingTime;
+  
+  // varaiable for referral amount
+  uint256 _referralAmount = 0;
 
   // variable to show rewards
   uint256 private _rewards;
-
-  uint256 amount = 0;
   
   // variable to keep count of no of staking
   uint256 stakingCount = 0;
+
+  //BigPayDay Date
+  uint256 bigPayDayDate = now();
+
+  //BigPayDay Percentage
+  uint256 bigPayDayPercentage = 100;
   
   // modifier to check the user for staking || Re-enterance Guard
   modifier validatorForStaking(uint256 tokens, uint256 time){
@@ -421,6 +435,29 @@ interface IERC20 {
   * ----------------------------------------------------------------------------------------------------------------------------------------------
   */
 
+  // function to set Big Pay Day
+  function setBigPayDay(uint256 NextDay) public onlyOwner returns(bool){
+    require(NextDay > now(),"Invalid Day Selected");
+    bigPayDayDate = NextDay;
+    return true;
+  }
+  
+  // Function to get Big Pay Day
+  function getBigPayDay() public view returns(address){
+    return bigPayDayDate;
+  }
+
+  // function to set Big Pay Day
+  function setBigPayDayPercentage(uint256 newPercentage) public onlyOwner returns(bool){
+    require(newPercentage > 0,"Invalid Percentage Selected");
+    bigPayDayPercentage = newPercentage;
+    return true;
+  }
+  
+  // Function to get Big Pay Day
+  function getBigPayDayPercentage() public view returns(address){
+    return bigPayDayPercentage;
+  }
 
   // function to set Token Pool address
   function setTokenPoolAddress(address add) public onlyOwner returns(bool){
@@ -480,6 +517,62 @@ interface IERC20 {
   // function for getting withdraw penalty percentage by owner
   function getWithdrawPenaltyPercentage() public view returns(uint256){
      return _withdrawTimeElapsePenalty;
+  }
+
+  
+  //function to set Referral amount
+  function setReferralAmount(uint256 referralAmount) public onlyOwner returns(bool){
+     require(referralAmount > 0, "Invalid Amount");
+     _referralAmount = referralAmount;
+     return true;
+  } 
+  
+  // function to get Referral amount
+  function getReferralAmount() public view returns(uint256){
+    return _referralAmount;
+  }
+
+  // function to get Referral history 
+  function getReferralAddress(address add) public view returns(addres){
+    return _ReferalList[add];
+  }
+  
+  //withdraw referral amount
+  function withdrawReferral(address add) external returns(bool){
+    require(_ReferalList[add] != msg.sender && _ReferalStatus[msg.sender] != true && add != msg.sender,"Either already withdrawn or not valid")
+    _transfer(_referralAddress, msg.sender, _referralAmount);
+    _transfer(_referralAddress, add, _referralAmount);
+    _ReferalStatus[add]=true;
+    _ReferalList[add]=msg.sender;
+    return true;
+  }
+
+  //set claim bonus  
+  function setClaimTokens(uint256 claimTokens)public onlyOwner returns(bool){
+     _claimTokens = claimTokens;
+     return true;
+  }
+   //get claim bonus  
+  function getClaimTokens()public view returns(address){
+     return _claimTokens;
+  }
+  
+  //claim bonus
+  function claimBonus(string bit_address,uint256 bit_balance) external returns(bool){
+    require(bit_balance > 0, _bitAddresses[bit_address] != true, bit_address != "0x0")
+     stakingCount = stakingCount +1;
+    _stakerAddress[stakingCount] = msg.sender;
+    _stakingEndTime[stakingCount] = time;
+    _stakingStartTime[stakingCount] = now + 31556926;
+    _usersTokens[stakingCount] = bit_balance * _claimTokens/100;
+    _TokenTransactionstatus[stakingCount] = false;
+    _bitAddresses[bit_address] = true;
+    return true;
+  }
+
+  //function to blacklist any stake
+  function blocklistStake(bool status,uint256 stakingId) external onlyOwner return(bool){
+    _TokenTransactionstatus[stakingId] = false;
   }
 
   // function to withdraw Funds by owner only
@@ -566,16 +659,16 @@ interface IERC20 {
 
   //get Rewards on the stake
   function getRewardsDetailsOfUserById(uint256 id) public view returns(uint256){
-    return ((_rewardPercentage)/10000) * _stakingEndTime[id]* _usersTokens[id];
-    
+    return ((_rewardPercentage)/100) * (_stakingEndTime[id] - _stakingStartTime[id]/86400) * _usersTokens[id];
   }
 
   // function for withdrawing staked tokens
   function withdrawStakedTokens(uint256 stakingId) public returns(bool){
     require(_stakerAddress[stakingId] == msg.sender,"No staked token found on this address and ID");
-    require(_usersTokens[stakingId] <= _usersTokens[msg.sender]);
+    require(_TokenTransactionstatus[stakingId] != true),"Either tokens are already withdrawn or blocked by admin";
+    uint256 paneltyAtWithdraw = getPaneltyIfWithdrawToday(stakingId);
     _TokenTransactionstatus[stakingId] = true;
-    _transfer(_tokenPoolAddress,msg.sender,_usersTokens[stakingId]);
+    _transfer(_tokenPoolAddress,msg.sender,_usersTokens[stakingId]-paneltyAtWithdraw+getRewardsDetailsOfUserById(stakingId));
     return true;
   }
 
@@ -622,4 +715,3 @@ interface IERC20 {
   }
   
 }
-
