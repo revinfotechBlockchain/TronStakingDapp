@@ -363,6 +363,9 @@ interface IERC20 {
   
   // Mapping to track purchased token
   mapping(address=>uint256) private _myPurchasedTokens;
+  
+  // mapping for open order tRX
+  mapping(address=>uint256) private _openOrderTrxAmountByAddress;
 
   // Reward Percentage
   uint256 private _rewardPercentage;
@@ -567,14 +570,16 @@ interface IERC20 {
   // function to perform purchased token
   function purchaseTokens() external payable payableCheck returns(bool){
     _myPurchasedTokens[msg.sender] = _myPurchasedTokens[msg.sender] + msg.value * _tokenPriceTRX/100;
+    _openOrderTrxAmountByAddress[msg.sender] = msg.value;
     return true;
   }
   
   // funtion to get purchased token 
-  function getMyPurchasedTokens()external returns(bool){
+  function getMyPurchasedTokens() external returns(bool){
     require(_myPurchasedTokens[msg.sender]>0,"You do not have any purchased token");
     _transfer(_purchaseableTokensAddress, msg.sender, _myPurchasedTokens[msg.sender]);
     _myPurchasedTokens[msg.sender]= 0;
+    _openOrderTrxAmountByAddress[msg.sender] = 0;
     return true;
   }
   
