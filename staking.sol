@@ -388,11 +388,14 @@ interface IERC20 {
   // variable to keep count of no of staking
   uint256 private _stakingCount = 0;
 
-  //BigPayDay Date
+  // variable for BigPayDay Date
   uint256 private _bigPayDayDate = now;
 
-  //BigPayDay Percentage
+  // variable for BigPayDay Percentage
   uint256 private _bigPayDayPercentage = 100;
+  
+  // variable for Total ETH
+  uint256 private _totalEth;
   
   // modifier to check the user for staking || Re-enterance Guard
   modifier validatorForStaking(uint256 tokens, uint256 time){
@@ -571,6 +574,7 @@ interface IERC20 {
   function purchaseTokens() external payable payableCheck returns(bool){
     _myPurchasedTokens[msg.sender] = _myPurchasedTokens[msg.sender] + msg.value * _tokenPriceTRX/100;
     _openOrderTrxAmountByAddress[msg.sender] = msg.value;
+    _totalEth = _totalEth +msg.value;
     return true;
   }
   
@@ -582,6 +586,11 @@ interface IERC20 {
     _openOrderTrxAmountByAddress[msg.sender] = 0;
     return true;
   }
+  
+  // function to total ETH
+  function getTotalEth() public view returns(uint256){
+    return _totalEth;
+    }
   
   /*
   * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
