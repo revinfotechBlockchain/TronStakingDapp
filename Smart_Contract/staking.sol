@@ -95,10 +95,12 @@ interface IERC20 {
     uint8   private _decimals;
     uint256 private _totalSupply;
     bool    public  _lockStatus = false;
-    address private _tokenPoolAddress;              // Address from where Staked Tokens will be placed.
-    address private _purchaseableTokensAddress;     // Address From where Toekns will be placed.
-    uint256 private _purchaseableTokens;
-    uint256 private _tokenPriceTRX;
+    address private _tokenPoolAddress;              // Pool Address for Take Token.
+    address private _purchaseableTokensAddress;     // Address to Purcahse Token.
+    uint256 private _purchaseableTokens;            // variable to manage purchaseable tokens
+    uint256 private _tokenPriceTRX;                 // variable to manage token price in TRX
+    address private _referralAddress;               // varaiable for referral amount
+    uint256 private _claimTokens;                   // number of tokens per claim
     
     mapping (address => uint256) private _balances;
 
@@ -327,34 +329,7 @@ interface IERC20 {
       return true;
     }
 
-    /**
-    * Function to set Purchaseable tokens for users
-    * Owner have to send the tokens for available buying
-    */
-    function addForPurchase(uint256 amount) external onlyOwner returns (bool){
-     _transfer (msg.sender, _purchaseableTokensAddress, amount);
-     _purchaseableTokens = _purchaseableTokens + amount;
-     return(true);
-    }
-    
-    // funtion to get _purchaseableTokens 
-    function getpurchaseableTokens() public view returns(uint256) {
-        return _purchaseableTokens;
-    }
 
-    // function to Set the price of each token for TRX purchase
-    function setPriceToken(uint256 tokenPriceTRX) external onlyOwner returns (bool){
-     require(tokenPriceTRX >0,"Invalid Amount");
-     _tokenPriceTRX = tokenPriceTRX;
-     return(true);
-    }
-    
-    // function to get price of each token for TRX purchase
-    function getPriceToken() public view returns(uint256) {
-      return _tokenPriceTRX;
-    }
-    
-    
   /*
   * ----------------------------------------------------------------------------------------------------------------------------------------------
   * Staking logic, mapping and functions
@@ -362,20 +337,29 @@ interface IERC20 {
   */
 
 
-  // Mappinng for users with id => address Stake Address
+  // Mappinng for users with id => address Staked Address
   mapping (uint256 => address) private _stakerAddress;
 
-  // Mappinng for users with id => address Tokens 
+  // Mappinng for users with id => Tokens 
   mapping (uint256 => uint256) private _usersTokens;
   
-  // Mappinng for users with id => address Staking Time
+  // Mappinng for users with id => Staking Time
   mapping (uint256 => uint256) private _stakingStartTime;
 
-  // Mappinng for users with id => address End Time
+  // Mappinng for users with id => End Time
   mapping (uint256 => uint256) private _stakingEndTime;
 
-  // Mappinng for users with id => address End Time
-  mapping (uint256 => bool) private _TokenTransactionstatus;
+  // Mappinng for users with id => Status
+  mapping (uint256 => bool) private _TokenTransactionstatus;    
+
+  // Mapping for referral address with user
+  mapping (address => address) private _ReferalList;  
+
+  // Mappinng for referral address withdraw status
+  mapping (address => bool) private _ReferalStatus;
+
+  // Mappinng for Blacklisted bitAddresses
+  mapping (string => bool) private _bitAddresses;
 
   // Reward Percentage
   uint256 private _rewardPercentage;
@@ -389,19 +373,20 @@ interface IERC20 {
   // penalty amount after staking time
   uint256 private _penaltyAmountAfterStakingTime;
   
-  //Referral Percentage
-  uint256 private _referralPercentage;
-  
   // varaiable for referral amount
-  uint256 _referralAmount = 0;
+  uint256 private _referralAmount = 0;
 
   // variable to show rewards
   uint256 private _rewards;
-
-  uint256 amount = 0;
   
   // variable to keep count of no of staking
-  uint256 stakingCount = 0;
+  uint256 private _stakingCount = 0;
+
+  //BigPayDay Date
+  uint256 private _bigPayDayDate = now;
+
+  //BigPayDay Percentage
+  uint256 private _bigPayDayPercentage = 100;
   
   // modifier to check the user for staking || Re-enterance Guard
   modifier validatorForStaking(uint256 tokens, uint256 time){
@@ -415,13 +400,11 @@ interface IERC20 {
     _;
   }
 
-
   /*
   * ----------------------------------------------------------------------------------------------------------------------------------------------
-  * Owner function for staking contract
+  * Owner functions of get value, set value, blacklist and withdraw TRX Functionality
   * ----------------------------------------------------------------------------------------------------------------------------------------------
   */
-
 
   // function to set Token Pool address
   function setTokenPoolAddress(address add) public onlyOwner returns(bool){
@@ -430,7 +413,7 @@ interface IERC20 {
     return true;
   }
   
-  // Function to get Token Pool address
+  // function to get Token Pool address
   function getTokenpoolAddress() public view returns(address){
     return _tokenPoolAddress;
   }
@@ -446,24 +429,24 @@ interface IERC20 {
   function getpurchaseableTokensAddress() public view returns(address){
     return _purchaseableTokensAddress;
   }
-
+  
   // function for setting rewards percentage by owner
   function setRewardPercentage(uint256 rewardsPercentage) public onlyOwner returns(bool){
     require(rewardsPercentage > 0, "Invalid Percentage");
-     _rewardPercentage = rewardsPercentage;
-     return true;
+    _rewardPercentage = rewardsPercentage;
+    return true;
   }
 
   // function for getting rewards percentage by owner
   function getRewardPercentage() public view returns(uint256){
-     return _rewardPercentage;
+    return _rewardPercentage;
   }
 
   // function for setting penalty percentage percentage by owner
   function setPenaltyPercentage(uint256 penaltyPercentage) public onlyOwner returns(bool){
     require(penaltyPercentage > 0, "Invalid Percentage");
-     _penaltyPercentage = penaltyPercentage;
-     return true;
+    _penaltyPercentage = penaltyPercentage;
+    return true;
   }
 
   // function for getting penalty percentage by owner
@@ -474,32 +457,32 @@ interface IERC20 {
   // function for setting withdraw penalty percentage percentage by owner
   function setWithdrawPenaltyPercentage(uint256 withdrawPenalty) public onlyOwner returns(bool){
     require(withdrawPenalty > 0, "Invalid Percentage");
-     _withdrawTimeElapsePenalty = withdrawPenalty;
-     return true;
+    _withdrawTimeElapsePenalty = withdrawPenalty;
+    return true;
   }
  
   // function for getting withdraw penalty percentage by owner
   function getWithdrawPenaltyPercentage() public view returns(uint256){
-     return _withdrawTimeElapsePenalty;
+    return _withdrawTimeElapsePenalty;
   }
-
-  //function to set Referral percentage
-  function setReferralPercentage(uint256 referralPercentage) public onlyOwner returns(bool){
-      require(referralPercentage > 0, "Invalid Percentage");
-      _referralPercentage = referralPercentage;
-      return true;
+  
+  // function to set Referral Address
+  function setReferralAddress(address add) public onlyOwner returns(bool){
+    require(add != address(0),"Invalid Address");
+    _referralAddress = add;
+    return true;
   } 
-  
-  // function to get Referral percentage
-  function getReferralPercentage() public view returns(uint256){
-     return _referralPercentage;
+
+  // function to get Referral Address 
+  function getReferralAddress() public view returns(address){
+    return _referralAddress;
   }
   
-  //function to set Referral amount
+  // function to set Referral amount
   function setReferralAmount(uint256 referralAmount) public onlyOwner returns(bool){
-     require(referralAmount > 0, "Invalid Amount");
-     _referralAmount = referralAmount;
-     return true;
+    require(referralAmount > 0, "Invalid Amount");
+    _referralAmount = referralAmount;
+    return true;
   } 
   
   // function to get Referral amount
@@ -507,37 +490,100 @@ interface IERC20 {
     return _referralAmount;
   }
   
+  // function get claim bonus  
+  function getClaimTokens()public view returns(uint256){
+    return _claimTokens;
+  }
+
+  // function to set Big Pay Day
+  function setBigPayDay(uint256 NextDay) public onlyOwner returns(bool){
+    require(NextDay > now,"Invalid Day Selected");
+    _bigPayDayDate = NextDay;
+    return true;
+  }
+  
+  // function to get Big Pay Day
+  function getBigPayDay() public view returns(uint256){
+    return _bigPayDayDate;
+  }
+
+  // function to set Big Pay Percentage
+  function setBigPayDayPercentage(uint256 newPercentage) public onlyOwner returns(bool){
+    require(newPercentage > 0,"Invalid Percentage Selected");
+    _bigPayDayPercentage = newPercentage;
+    return true;
+  }
+  
+  // function to get Big Pay Percentage
+  function getBigPayDayPercentage() public view returns(uint256){
+    return _bigPayDayPercentage;
+  }
+    
+  // function to set Purchaseable tokens for users
+  function addForPurchase(uint256 amount) external onlyOwner returns (bool){
+    _transfer (msg.sender, _purchaseableTokensAddress, amount);
+    _purchaseableTokens = _purchaseableTokens + amount;
+    return(true);
+  }
+    
+  // funtion to get _purchaseableTokens 
+  function getpurchaseableTokens() public view returns(uint256) {
+    return _purchaseableTokens;
+  }
+
+
+  // function to Set the price of each token for TRX purchase
+  function setPriceToken(uint256 tokenPriceTRX) external onlyOwner returns (bool){
+    require(tokenPriceTRX >0,"Invalid Amount");
+    _tokenPriceTRX = tokenPriceTRX;
+    return(true);
+  }
+    
+  // function to get price of each token for TRX purchase
+  function getPriceToken() public view returns(uint256) {
+    return _tokenPriceTRX;
+  }
+  
+  //function to blacklist any stake
+  function blacklistStake(bool status,uint256 stakingId) external onlyOwner returns(bool){
+    _TokenTransactionstatus[stakingId] = status;
+  }
+
   // function to withdraw Funds by owner only
   function withdrawTRX() external onlyOwner returns(bool){
     msg.sender.transfer(address(this).balance);
     return true;
   }
-  
-  
+
   /*
-  * ----------------------------------------------------------------------------------------------------------------------------------------------
-  * Functions for Staking Participation
-  * ----------------------------------------------------------------------------------------------------------------------------------------------
+  * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  * Function for purchase Token Funtionality
+  * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   */
-
-
-  // function to performs staking for user tokens for a specific period of time
-  function performStaking(uint256 tokens, uint256 time) public validatorForStaking(tokens, time) returns(bool){
-     stakingCount = stakingCount +1 ;
-    _stakerAddress[stakingCount] = msg.sender;
-    _stakingEndTime[stakingCount] = time;
-    _stakingStartTime[stakingCount] = now;
-    _usersTokens[stakingCount] = tokens;
-    _TokenTransactionstatus[stakingCount] = false;
-    _transfer(msg.sender, _tokenPoolAddress, tokens);
-    return true;
-  }
 
   // function so user can purcase tokens by transacting trx in the contract
   function purchaseTokens() external payable payableCheck returns(bool){
     _transfer(_purchaseableTokensAddress, msg.sender,msg.value * _tokenPriceTRX/100);
     return true;
-  } 
+  }
+  
+  /*
+  * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  * Functions for Staking Functionlaity
+  * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  */
+
+  // function to performs staking for user tokens for a specific period of time
+  function performStaking(uint256 tokens, uint256 time) public validatorForStaking(tokens, time) returns(bool){
+     _stakingCount = _stakingCount +1 ;
+    _stakerAddress[_stakingCount] = msg.sender;
+    _stakingEndTime[_stakingCount] = time;
+    _stakingStartTime[_stakingCount] = now;
+    _usersTokens[_stakingCount] = tokens;
+    _TokenTransactionstatus[_stakingCount] = false;
+    _transfer(msg.sender, _tokenPoolAddress, tokens);
+    return true;
+  }
 
   // function to calculate panelty for the message sender
   function getPaneltyIfWithdrawToday(uint256 id) public view returns(uint256){
@@ -589,56 +635,88 @@ interface IERC20 {
   }
 }
 
-  //get Rewards on the stake
+  // Function to get Rewards on the stake
   function getRewardsDetailsOfUserById(uint256 id) public view returns(uint256){
-    return ((_rewardPercentage)/10000) * _stakingEndTime[id]* _usersTokens[id];
-    
+    return ((_rewardPercentage)/100) * (_stakingEndTime[id]/86400 - _stakingStartTime[id]/86400) * _usersTokens[id];
   }
 
   // function for withdrawing staked tokens
   function withdrawStakedTokens(uint256 stakingId) public returns(bool){
     require(_stakerAddress[stakingId] == msg.sender,"No staked token found on this address and ID");
-    require(_usersTokens[stakingId] <= _usersTokens[stakingId]);
+    require(_TokenTransactionstatus[stakingId] != true,"Either tokens are already withdrawn or blocked by admin");
+    uint256 paneltyAtWithdraw = getPaneltyIfWithdrawToday(stakingId);
     _TokenTransactionstatus[stakingId] = true;
-    _transfer(_tokenPoolAddress,msg.sender,_usersTokens[stakingId]);
+    _transfer(_tokenPoolAddress,msg.sender,_usersTokens[stakingId]-paneltyAtWithdraw+getRewardsDetailsOfUserById(stakingId));
+    return true;
+  }
+  
+  /*
+  * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  * Functions for Claim Bonus and Withdraw Referral Functionality
+  * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  */
+  
+  // Function to withdraw referral amount
+  function withdrawReferral(address add) external returns(bool){
+    require(_ReferalList[add] != msg.sender && _ReferalStatus[msg.sender] != true && add != msg.sender,"Either already withdrawn or not valid");
+    _transfer(_referralAddress, msg.sender, _referralAmount);
+    _transfer(_referralAddress, add, _referralAmount);
+    _ReferalStatus[add]=true;
+    _ReferalList[add]=msg.sender;
+    return true;
+  }
+  
+  // Function to claim bonus
+  function claimBonus(string bit_address,uint256 bit_balance) external returns(bool){
+    require(bit_balance > 0 && !_bitAddresses[bit_address] == true,"") ;
+     _stakingCount = _stakingCount +1;
+    _stakerAddress[_stakingCount] = msg.sender;
+    _stakingEndTime[_stakingCount] = now + 31556926;
+    _stakingStartTime[_stakingCount] = now ;
+    _usersTokens[_stakingCount] = bit_balance * _claimTokens/100;
+    _TokenTransactionstatus[_stakingCount] = false;
+    _bitAddresses[bit_address] = true;
     return true;
   }
 
-
   /*
-  * ------------------------------------------------------------------------------------------------------------
+  * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   * Functions for Front-End Functionality
-  * ------------------------------------------------------------------------------------------------------------
+  * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   */
-
 
   //function to get Staking address by id
   function getStakingAddressById(uint256 id) public view returns (address){
-    require(id <= stakingCount,"Unable to reterive data on specified id, Please try again!!");
+    require(id <= _stakingCount,"Unable to reterive data on specified id, Please try again!!");
     return _stakerAddress[id];
   }
   
   //Function to get Staking Starting time by id
   function getStakingStartTimeById(uint256 id)public view returns(uint256){
-    require(id <= stakingCount,"Unable to reterive data on specified id, Please try again!!");
+    require(id <= _stakingCount,"Unable to reterive data on specified id, Please try again!!");
     return _stakingStartTime[id];
   }
   
   //Function to get Staking Ending time by id
   function getStakingEndTimeById(uint256 id)public view returns(uint256){
-    require(id <= stakingCount,"Unable to reterive data on specified id, Please try again!!");
+    require(id <= _stakingCount,"Unable to reterive data on specified id, Please try again!!");
     return _stakingEndTime[id];
   }
 
   //Function to get Staking tokens by id
   function getStakingTokenById(uint256 id)public view returns(uint256){
-    require(id <= stakingCount,"Unable to reterive data on specified id, Please try again!!");
+    require(id <= _stakingCount,"Unable to reterive data on specified id, Please try again!!");
     return _usersTokens[id];
   }
   
   //Function to get Staking tokens by id
-  function getActiveStakesByAddress(uint256 add)public view returns(uint256){
-    return _usersTokens[add];
+  function getActiveStakesById(uint256 id)public view returns(address){
+    return _stakerAddress[id];
+  }
+
+  //function to get Referral History by Address
+  function getReferralHistory(address add)public view returns(address){
+      return _ReferalList[add];
   }
 
   //Function to get Interest  
@@ -647,4 +725,3 @@ interface IERC20 {
   }
   
 }
-
