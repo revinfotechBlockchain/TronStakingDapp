@@ -89,18 +89,18 @@ interface IERC20 {
 
     using SafeMath for uint256;
 
-    address private _owner;
-    string  private _name;
-    string  private _symbol;
-    uint8   private _decimals;
-    uint256 private _totalSupply;
-    bool    public  _lockStatus = false;
-    address private _tokenPoolAddress;              // Pool Address for Take Token.
-    address private _purchaseableTokensAddress;     // Address to Purcahse Token.
-    uint256 private _purchaseableTokens;            // variable to manage purchaseable tokens
-    uint256 private _tokenPriceTRX;                 // variable to manage token price in TRX
-    address private _referralAddress;               // varaiable for referral amount
-    uint256 private _claimTokens;                   // number of tokens per claim
+    address private _owner;                         // Variable for Owner of the Contract.
+    string  private _name;                          // Variable for Name of the token.
+    string  private _symbol;                        // Variable for symbol of the token.
+    uint8   private _decimals;                      // variable to maintain decimal precision of the token.
+    uint256 private _totalSupply;                   // Variable for total supply of token.
+    bool    public  _lockStatus = false;        
+    address private _tokenPoolAddress;              // Pool Address to manage Staking user's Token.
+    address private _purchaseableTokensAddress;     // Address for managing token for token purchase.
+    uint256 private _purchaseableTokens;            // Amount of token available for purchase.
+    uint256 private _tokenPriceTRX;                 // variable to set price of token with respect to TRX.
+    address private _referralAddress;               // variable for referral amount.
+    uint256 private _claimTokens;                   // number of tokens per claim.
     
     mapping (address => uint256) private _balances;
 
