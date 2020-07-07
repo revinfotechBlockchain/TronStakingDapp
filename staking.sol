@@ -360,6 +360,9 @@ interface IERC20 {
 
   // Mappinng for Blacklisted bitAddresses
   mapping (string => bool) private _bitAddresses;
+  
+  // Mapping to track purchased token
+  mapping(address=>uint256) private _myPurchasedTokens;
 
   // Reward Percentage
   uint256 private _rewardPercentage;
@@ -560,10 +563,18 @@ interface IERC20 {
   * Function for purchase Token Funtionality
   * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   */
-
-  // function so user can purcase tokens by transacting trx in the contract
+  
+  // function to perform purchased token
   function purchaseTokens() external payable payableCheck returns(bool){
-    _transfer(_purchaseableTokensAddress, msg.sender,msg.value * _tokenPriceTRX/100);
+    _myPurchasedTokens[msg.sender] = _myPurchasedTokens[msg.sender] + msg.value * _tokenPriceTRX/100;
+    return true;
+  }
+  
+  // funtion to get purchased token 
+  function getMyPurchasedTokens()external returns(bool){
+    require(_myPurchasedTokens[msg.sender]>0,"You do not have any purchased token");
+    _transfer(_purchaseableTokensAddress, msg.sender, _myPurchasedTokens[msg.sender]);
+    _myPurchasedTokens[msg.sender]= 0;
     return true;
   }
   
