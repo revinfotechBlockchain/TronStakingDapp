@@ -23,7 +23,7 @@ module.exports = {
                 var dataoutput = output.data.data;
                 if (output) {
                     dataoutput.forEach(element => {
-                        if(req.query.address == element.from)
+                        if(req.query.address == element.from && element.token_info.name == 'RYZ') 
                         returnData.push({
                                     day: element.block_timestamp,
                                     type: element.type,
@@ -33,9 +33,9 @@ module.exports = {
                                 });
                     });
                 }
-               res.send({status:true,address:req.query.address,data:returnData});
+               res.send({status:true, address:req.query.address, data:returnData});
             }).catch(err => {
-                let response = {status:false, message:"Unable to get Transaction Details, Try Again!!!"};
+                let response = {status:false, message:"Unable to get Transaction Details, Please Try Again!!!"};
                 res.send(response);
             });
         } else {
@@ -98,8 +98,8 @@ module.exports = {
 
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getStakingAddressById(req.query.id).call().then(async output => {
-                let response = '{"status":"true","address":"'+output+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, address:output};
+                res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Staking Address by Id, Please Try Again!!!"};
                 res.send(response);
@@ -122,8 +122,8 @@ module.exports = {
 
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getStakingTokenById(req.query.id).call().then(async output => {
-                let response = '{"status":"true","token":"'+output+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, token:output};
+                res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Staking Token by Id, Please Try Again!!!"};
                 res.send(response);
@@ -149,8 +149,8 @@ module.exports = {
                 const unixEpochTimeMS = output * 1000;
                 const d = new Date(unixEpochTimeMS);
                 const time = d.toLocaleString();
-                let response = '{"status":"true","time":"'+time+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, time:time};
+                res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Staking Start Time by Id, Please Try Again!!!"};
                 res.send(response);
@@ -176,8 +176,8 @@ module.exports = {
                 const unixEpochTimeMS = output * 1000;
                 const d = new Date(unixEpochTimeMS);
                 const time = d.toLocaleString();
-                let response = '{"status":"true","time":"'+time+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, time:time};
+                res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Staking End Time by Id, Please Try Again!!!"};
                 res.send(response);
@@ -200,8 +200,8 @@ module.exports = {
 
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getActiveStakesById(req.query.id).call().then(async output => {
-                let response = '{"status":"true","address":"'+output+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, address:output};
+                res.send(response);
             }).catch(err => {
                 console.log(err)
                 let response = {status:false, message:"Unable to get Active Stake by Id, Please Try Again!!!"};
@@ -225,9 +225,7 @@ module.exports = {
 
         if(req.query.address && !req.query.address == ""){
             await newContract && newContract.getReferralHistory(req.query.address).call().then(async output => {
-                //let response = '{"status":"true","token":"'+output+'"}';
-                //res.send(JSON.parse(response));
-                res.send(ouput);
+                res.send(output);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Referral History by Address, Please Try Again!!!"};
                 res.send(response);
@@ -249,8 +247,8 @@ module.exports = {
         var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.getInterest().call().then(async output => {
-                let response = '{"status":"true","interest":"'+output+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, interest:output};
+                res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Staking Address by Id, Please Try Again!!!"};
                 res.send(response);

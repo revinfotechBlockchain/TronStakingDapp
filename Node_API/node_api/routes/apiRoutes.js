@@ -230,7 +230,7 @@ router.get('/getTransactionByHash', genericController.getTransactionByHash);
     * @group Generic_API
     * @security Basic Auth
     */
-router.get('/getTransactionsByAddress', genericController.getTransactionsByAddress);                                    //problem
+router.get('/getTransactionsByAddress', genericController.getTransactionsByAddress);                                   
 
     /**
     * @typedef getTransactionByBlock
@@ -267,7 +267,7 @@ router.get('/getStatus', genericController.getStatus);
     * @group Smart_Contract_API
     * @security Basic Auth
     */
-router.get('/getTokenOwner', contractController.getTokenOwner);                                                                   //problem
+router.get('/getTokenOwner', contractController.getTokenOwner);                                                                   
 
     /**
     * @typedef getTokenOwnerBalance
@@ -551,7 +551,17 @@ router.get('/getClaimTokens', contractController.getClaimTokens);
     * @group Staking_API
     * @security Basic Auth
     */
-router.get('/getRewardsDetailsOfUserById', contractController.getRewardsDetailsOfUserById);                                       
+router.get('/getRewardsDetailsOfUserById', contractController.getRewardsDetailsOfUserById);  
+
+    /**
+    * @typedef getTotalEth
+    */
+    /**
+    * @route GET /api/tron/getTotalEth
+    * @group Staking_API
+    * @security Basic Auth
+    */
+router.get('/getTotalEth', contractController.getTotalEth);
 
 
 

@@ -33,11 +33,11 @@ module.exports = {
             tronWeb.setDefaultBlock('latest');
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
             await newContract && newContract.getowner().call().then(async output => {
-                let response = '{"status":"true","address":"'+output+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, address:output};
+                res.send(response);
             }).catch(err => {
-                let response = '{"status":"false","message":"Unable to get Owner Address, Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Unable to get Owner Address, Please Try Again!!!"};
+                res.send(response);
             });
     },
 
@@ -53,15 +53,15 @@ module.exports = {
           
             if(req.query.address && !req.query.address == ""){
                 await newContract && newContract.balanceOf(req.query.address).call().then(async output => {
-                    let response = '{"status":"true", "address": "'+req.query.address+'", "balance": "'+output.toString()+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, address:req.query.address, balance:output.toString()};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to get Owner Balance, Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to get Owner balance, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter valid Address & Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter valid Address & Try Again!!!"};
+                res.send(response);
             }
     },
 
@@ -76,11 +76,11 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.name().call().then(async output => {
-                let response = '{"status":"true","name":"'+output+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, name:output};
+                res.send(response);
             }).catch(err => {
-                let response = '{"status":"false","message":"Unable to get Name of the token, Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Unable to get Name of the token, Please Try Again!!!"};
+                res.send(response);
             });
     },
 
@@ -95,11 +95,11 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.symbol().call().then(async output => {
-                let response = '{"status":"true","symbol":"'+output+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, symbol:output};
+                res.send(response);
             }).catch(err => {
-                let response = '{"status":"false","message":"Unable to get Symbol of the token, Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Unable to get Symbol of the token, Please Try Again!!!"};
+                res.send(response);
             });
     },
 
@@ -114,11 +114,11 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.totalSupply().call().then(async output => {
-                let response = '{"status":"true","totalSupply":"'+output.toString()+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, totalSupply:output.toString()};
+                res.send(response);
             }).catch(err => {
-                let response = '{"status":"false","message":"Unable to get Total supply, Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Unable to get Total Supply of the token, Please Try Again!!!"};
+                res.send(response);
             });
     },
 
@@ -135,15 +135,15 @@ module.exports = {
 
             if(req.body.address && req.body.amount && ! req.body.address == "" && ! req.body.amount == 0) {
                 await newContract && newContract.approve(req.body.address, req.body.amount).send().then(async output => {
-                    let response = '{"status":"true", "address":"'+req.body.address+'", "amount":"'+req.body.amount+'", "hash":"'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, address:req.body.address, amount:req.body.amount, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to Approve token, Please Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to Approve token, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter valid Address or amount and Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter valid Address or amount and Try Again!!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -164,15 +164,15 @@ module.exports = {
 
             if(req.body.address && req.body.amount && ! req.body.address == "" && ! req.body.amount == 0) {
                 await newContract && newContract.increaseAllowance(req.body.address, req.body.amount).send().then(async output => {
-                    let response = '{"status":"true", "address":"'+req.body.address+'", "amount":"'+req.body.amount+'", "hash":"'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, address:req.body.address, amount:req.body.amount, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to increase allowance of tokens, Please Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to increase allowance of tokens, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter valid Address or amount and Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter valid Address or amount and Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -193,15 +193,15 @@ module.exports = {
 
             if(req.body.address && req.body.amount && ! req.body.address == "" && ! req.body.amount == 0) {
                 await newContract && newContract.decreaseAllowance(req.body.address, req.body.amount).send().then(async output => {
-                    let response = '{"status":"true", "address":"'+req.body.address+'", "amount":"'+req.body.amount+'", "hash":"'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, address:req.body.address, amount:req.body.amount, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to decrease allowance of tokens, Please Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to decrease allowance of tokens, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter valid Address or amount and Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter valid Address or amount and Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -224,15 +224,15 @@ module.exports = {
 
             if(req.body.toAddress && amount && ! req.body.toAddress == "" && ! amount == 0) {
                 await newContract && newContract.transfer(req.body.toAddress,amount).send().then(async output => {
-                    let response = '{"status":"true","toAddress":"'+req.body.toAddress+'", "amount":"'+amount+'","hash":"'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, toAddress:req.body.toAddress, amount:amount, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to do transfer, Please Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to do transfer, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter valid To address or amount and Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false,message:"Enter valid To address or amount and Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -255,16 +255,15 @@ module.exports = {
 
             if(req.body.fromAddress && req.body.toAddress && amount && ! req.body.fromAddress=="" && ! req.body.toAddress=="" && ! amount==0) {
                 await newContract && newContract.transferFrom(req.body.fromAddress, req.body.toAddress, amount).send().then(async output => {
-                    let response = '{"status":"true", "fromAddress":"'+req.body.fromAddress+'", "toAddress":"'+req.body.toAddress+'", "amount":"'+amount+'","hash":"'+output+'"}';
-                    res.send(JSON.parse(response));
-                    res.send(output);
+                    let response = {status:true, fromAddress:req.body.fromAddress, toAddress:req.body.toAddress, amount:amount, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    res.status(400);
-                    res.send({"message": err});
+                    let response = {status:false, message:"Unable to transfer from one address to another, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter valid address or amount and Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter valid address or amount and Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -287,16 +286,15 @@ module.exports = {
 
             if(amount && ! amount==0) {
                 await newContract && newContract.burn(amount).send().then(async output => {
-                    let response = '{"status":"true","burnAmount":"'+amount+'", "hash":"'+output+'"}';
-                    res.send(JSON.parse(response));
-                    //res.send(output);
+                    let response = {status:true, burnAmount:amount, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to burn token, Please Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to burn token, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter valid amount and Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter Valid Amount & Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -317,15 +315,15 @@ module.exports = {
 
             if(req.body.address && ! req.body.address==0) {
                 await newContract && newContract.transferOwnership(req.body.address).send().then(async output => {
-                    let response = '{"status":"true","address":"'+req.body.address+'", "hash":"'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, address:req.body.address, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to transfer Ownership, Please Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to Transfer Ownership, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter valid address and Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter Valid Address & Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -354,10 +352,10 @@ module.exports = {
             const unixEpochTimeMS = output * 1000;
             const d = new Date(unixEpochTimeMS);
             const time = d.toLocaleString();
-            let response = '{"status":"true","day":"'+time+'"}';
-            res.send(JSON.parse(response));
+            let response = {status:true, day:time};
+            res.send(response);
         }).catch(err => {
-            let response = {status:false, message:"Unable to get Bigpay Day Date, Try Again!!!"};
+            let response = {status:false, message:"Unable to get Bigpay Day Date, Please Try Again!!!"};
             res.send(response);
         });
     },
@@ -373,12 +371,10 @@ module.exports = {
         var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
         await newContract && newContract.getBigPayDayPercentage().call().then(async output => {
-            let response = '{"status":"true","percentage":"'+output+'"}';
-            res.send(JSON.parse(response));
-            //res.send(output);
-
+            let response = {status:true, percentage:output};
+            res.send(response);
         }).catch(err => {
-            let response = {status:false, message:"Unable to get Bigpay Day Perentage, Try Again!!!"};
+            let response = {status:false, message:"Unable to get Bigpay Day Perentage, Please Try Again!!!"};
             res.send(response);
         });
     },
@@ -394,10 +390,10 @@ module.exports = {
         var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
         await newContract && newContract.getTokenpoolAddress().call().then(async output => {
-            let response = '{"status":"true","address":"'+output+'"}';
-            res.send(JSON.parse(response));
+            let response = {status:true, address:output};
+            res.send(response);
         }).catch(err => {
-            let response = {status:false, message:"Unable to get Tokenpool Address, Try Again!!!"};
+            let response = {status:false, message:"Unable to get Tokenpool Address, Please Try Again!!!"};
             res.send(response);
         });
     },
@@ -413,11 +409,11 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.getpurchaseableTokensAddress().call().then(async output => {
-                let response = '{"status":"true","address":"'+output+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, address:output};
+                res.send(response);
             }).catch(err => {
-                let response = '{"status":"false","message":"Unable to get purchaseableTokens Address, Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Unable to get purchaseableTokens Address, Please Try Again!!!"};
+                res.send(response);
             });
     },
 
@@ -432,11 +428,11 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.getpurchaseableTokens().call().then(async output => {
-                let response = '{"status":"true","purchaseableTokens":"'+output+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, purchaseableTokens:output};
+                res.send(response);
             }).catch(err => {
-                let response = '{"status":"false","message":"Unable to get purchaseable Tokens, Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false,message:"Unable to get purchaseable Tokens, Please Try Again!!!"};
+                res.send(response);
             });
     },
 
@@ -451,11 +447,11 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.getPriceToken().call().then(async output => {
-                let response = '{"status":"true","priceOfToken":"'+output+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, priceOfToken:output};
+                res.send(response);
             }).catch(err => {
-                let response = '{"status":"false","message":"Unable to get price of Tokens, Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Unable to get price of Tokens, Please Try Again!!!"};
+                res.send(response);
             });
     },
 
@@ -470,11 +466,11 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.getRewardPercentage().call().then(async output => {
-                let response = '{"status":"true","percentage":"'+output/100+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, percentage:output/100};
+                res.send(response);
             }).catch(err => {
-                let response = '{"status":"false","message":"Unable to get Reward Percentage , Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Unable to get Reward Percentage, Please Try Again!!!"};
+                res.send(response);
             });
     },
 
@@ -489,11 +485,11 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.getPenaltyPercentage().call().then(async output => {
-                let response = '{"status":"true","percentage":"'+output/100+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, percentage:output/100};
+                res.send(response);
             }).catch(err => {
-                let response = '{"status":"false","message":"Unable to get Penalty Percentage , Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Unable to get Penalty Percentage, Please Try Again!!!"};
+                res.send(response);
             });
     },
 
@@ -508,11 +504,11 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.getWithdrawPenaltyPercentage().call().then(async output => {
-                let response = '{"status":"true","percentage":"'+output/100+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, percentage:output/100};
+                res.send(response);
             }).catch(err => {
-                let response = '{"status":"false","message":"Unable to get Withdraw Penalty Percentage , Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Unable to get Withdraw Penalty Percentage, Please Try Again!!!"};
+                res.send(response);
             });
     },
 
@@ -528,8 +524,8 @@ module.exports = {
       
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getPaneltyIfWithdrawToday(req.query.id).call().then(async output => {
-                let response = '{"status":"true", "id": "'+req.query.id+'", "penalty": "'+output+'"}';
-                res.send(JSON.parse(response));
+                let response = {status:true, id:req.query.id, penalty:output};
+                res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Penalty by Today, Try Again!!!"};
                 res.send(response);
@@ -572,8 +568,8 @@ module.exports = {
         var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
         await newContract && newContract.getReferralAmount().call().then(async output => {
-            let response = '{"status":"true","amount":"'+output+'"}';
-            res.send(JSON.parse(response));
+            let response = {status:true, amount:output};
+            res.send(response);
         }).catch(err => {
             let response = {status:false, message:"Unable to get Referral Amount, Try Again!!!"};
             res.send(response);
@@ -591,8 +587,8 @@ module.exports = {
         var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
         await newContract && newContract.getClaimTokens().call().then(async output => {
-            let response = '{"status":"true","token":"'+output+'"}';
-            res.send(JSON.parse(response));
+            let response = {status:true, token:output};
+            res.send(response);
         }).catch(err => {
             let response = {status:false, message:"Unable to get Claimed Token, Try Again!!!"};
             res.send(response);
@@ -611,16 +607,35 @@ module.exports = {
 
         if(req.query.id && !req.query.id== ""){
             await newContract && newContract.getRewardsDetailsOfUserById(req.query.id).call().then(async output => {
-                let response = '{"status":"true","id":"'+req.query.id+'", "amount" : "'+output+'"}';
-                res.send(JSON.parse(response));  
+                let response = {status:true, id:req.query.id, amount:output};
+                res.send(response);
             }).catch(err => {
-                let response = {status:false, message:"Unable to get Reward Detail by User Id, Try Again!!!"};
+                let response = {status:false, message:"Unable to get Reward Detail by User Id, Please Try Again!!!"};
                 res.send(response);
             });
         } else {
             let response = {status:false, message:"Enter valid Id & Try Again!!!"};
             res.send(response); 
         }
+    },
+
+    getTotalEth: async (req, res) => {
+        const tronWeb = new TronWeb(
+          fullNode,
+          solidityNode,
+          eventServer,
+          DemoPrivateKey
+    );
+       tronWeb.setDefaultBlock('latest');
+       var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
+
+       await newContract && newContract.getTotalEth().call().then(async output => {
+          let response = {status:true, ETH:output};
+          res.send(response);
+      }).catch(err => {
+          let response = {status:false, message:"Unable to get total ETH, Please Try Again!!!"};
+          res.send(response);
+      });
     },
 
 //-----------------------------------------------------------------------SET FUNCTIONS------------------------------------------------------------------------//   
@@ -641,8 +656,8 @@ module.exports = {
                     const unixEpochTimeMS = req.body.day * 1000;
                     const d = new Date(unixEpochTimeMS);
                     const time = d.toLocaleString();
-                    let response = '{"status":"true","day":"'+time+'", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, day:time, hash:output};
+                    res.send(response);
                 }).catch(err => {
                     console.log(err)
                     let response = {status:false, message:"Unable to set Bigpay day date, Please Try Again!!!"};
@@ -673,8 +688,8 @@ module.exports = {
 
             if(percentage && !percentage == "" && !percentage == 0){
                 await newContract && newContract.setBigPayDayPercentage(percentage).send().then(async output => {
-                    let response = '{"status":"true", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, hash:output};
+                    res.send(response);
                 }).catch(err => {
                     console.log(err)
                     let response = {status:false, message:"Unable to set Bigpay day percentage, Please Try Again!!!"};
@@ -703,8 +718,8 @@ module.exports = {
 
             if(req.body.address && !req.body.address == ""){
                 await newContract && newContract.setTokenPoolAddress(req.body.address).send().then(async output => {
-                    let response = '{"status":"true","address":"'+req.body.address+'", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, address:req.body.address, hash:output};
+                    res.send(response);
                 }).catch(err => {
                     let response = {status:false, message:"Unable to set Token Pool Address, Please Try Again!!!"};
                     res.send(response); 
@@ -732,15 +747,15 @@ module.exports = {
 
             if(req.body.address && !req.body.address== ""){
                 await newContract && newContract.setpurchaseableTokensAddress(req.body.address).send().then(async output => {
-                    let response = '{"status":"true","address":"'+req.body.address+'", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, address:req.body.address, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to set Purchaseable Token Address , Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to set Purchaseable Token Address, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter Valid address & Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter valid Address & Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -763,15 +778,15 @@ module.exports = {
 
             if(amount && !amount== "" && ! amount == 0){
                 await newContract && newContract.addForPurchase(amount).send().then(async output => {
-                    let response = '{"status":"true","amount":"'+amount+'", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, amount:amount, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to set Purchaseable Tokens , Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to set Purchaseable Token, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter Valid amount & Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter Valid amount & Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -792,15 +807,15 @@ module.exports = {
 
             if(req.body.price && !req.body.price== "" && ! req.body.price == 0){
                 await newContract && newContract.setPriceToken(req.body.price).send().then(async output => {
-                    let response = '{"status":"true","price":"'+req.body.price+'", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, price:req.body.price, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to set Prie of Tokens , Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to set Price of Tokens, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter Valid price & Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter Valid price & Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -823,15 +838,15 @@ module.exports = {
 
             if(percentage && !percentage== "" && ! percentage == 0){
                 await newContract && newContract.setRewardPercentage(percentage).send().then(async output => {
-                    let response = '{"status":"true", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to set Reward Percentage , Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to set Reward Percentage, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter Valid percentage & Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter Valid percentage & Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -854,15 +869,15 @@ module.exports = {
 
             if(percentage && !percentage== "" && ! percentage == 0){
                 await newContract && newContract.setPenaltyPercentage(percentage).send().then(async output => {
-                    let response = '{"status":"true", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to set Penalty Percentage , Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to set Penalty Percentage, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter Valid percentage & Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false,message:"Enter Valid percentage & Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -885,15 +900,15 @@ module.exports = {
 
             if(percentage && !percentage== "" && !percentage == 0){
                 await newContract && newContract.setWithdrawPenaltyPercentage(percentage).send().then(async output => {
-                    let response = '{"status":"true", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = '{"status":"false","message":"Unable to set Withdraw Penalty Percentage , Try Again!!!"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:false, message:"Unable to set Withdraw Penalty Percentage, Please Try Again!!!"};
+                    res.send(response);
                 });
             } else {
-                let response = '{"status":"false","message":"Enter Valid percentage & Try Again!!!"}';
-                res.send(JSON.parse(response));
+                let response = {status:false, message:"Enter Valid percentage & Try Again!!!"};
+                res.send(response);
             }
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
@@ -914,8 +929,8 @@ module.exports = {
 
             if(req.body.amount && !req.body.amount == "" && !req.body.amount == 0){
                 await newContract && newContract.setReferralAmount(req.body.amount).send().then(async output => {
-                    let response = '{"status":"true","amount":"'+req.body.amount+'", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, amount:req.body.amount, hash:output};
+                    res.send(response);
                 }).catch(err => {
                     let response = {status:false, message:"Unable to set Referral Amount, Please Try Again!!!"};
                     res.send(response); 
@@ -945,8 +960,8 @@ module.exports = {
 
             if(amount && req.body.time && !amount== "" && !req.body.time=="" && ! amount == 0 ){
                 await newContract && newContract.performStaking(amount, req.body.time).send().then(async output => {
-                    let response = '{"status":"true","amount":"'+amount+'", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, amount:amount, hash:output};
+                    res.send(response);
                 }).catch(err => {
                     let response = {status:false, message:"Unable to perform Staking of token, Please Try Again!!!"};
                     res.send(response);
@@ -976,10 +991,10 @@ module.exports = {
 
             if(amount && !amount== "" && ! amount == 0 ){
                 await newContract && newContract.withdrawStakedTokens(amount).send().then(async output => {
-                    let response = '{"status":"true","amount":"'+amount+'", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, amount:amount, hash:output};
+                    res.send(response);
                 }).catch(err => {
-                    let response = {status:false, message:"Unable to Withdraw Staked Token , Try Again!!!"};
+                    let response = {status:false, message:"Unable to Withdraw Staked Token , Please Try Again!!!"};
                     res.send(response);
                 });
             } else {
@@ -1005,8 +1020,8 @@ module.exports = {
 
             if(req.body.id && !req.body.id == "" && ! req.body.id == 0 && req.body.status && !req.body.status == ""){
                 await newContract && newContract.blacklistStake(req.body.status, req.body.id).send().then(async output => {
-                    let response = '{"status":"true","id":"'+req.body.id+'", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, id:req.body.id, hash:output};
+                    res.send(response);
                 }).catch(err => {
                     let response = {status:false, message:"Unable to Blacklist Address, Please Try Again!!!"};
                     res.send(response);
@@ -1034,8 +1049,8 @@ module.exports = {
 
             if(req.body.address && !req.body.address== ""){
                 await newContract && newContract.withdrawReferral(req.body.address).send().then(async output => {
-                    let response = '{"status":"true","address":"'+req.body.address+'", "hash" : "'+output+'"}';
-                    res.send(JSON.parse(response));
+                    let response = {status:true, address:req.body.address, hash:output};
+                    res.send(response);
                 }).catch(err => {
                     let response = {status:false, message:"Unable to Withdraw Referral Amount, Please Try Again!!!"};
                     res.send(response);

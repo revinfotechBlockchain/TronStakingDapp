@@ -33,7 +33,7 @@ createAccount:  async (req, res) => {
         return_val.data = output;
         res.send(return_val);
       }).catch(err => {
-        let response = {status:false, message:"Unable to get Create Account, Try Again!!!"};
+        let response = {status:false, message:"Unable to get Create Account, Please Try Again!!!"};
         res.send(response);
      })
 },
@@ -55,7 +55,7 @@ getAccount: async (req, res) => {
             return_val.data = output;
             res.send(return_val);
         }).catch(err => {
-            let response = {status:false, message:"Unable to get account detail, Try Again!!!"};
+            let response = {status:false, message:"Unable to get account detail, Please Try Again!!!"};
             res.send(response);
         });
     } else {
@@ -74,8 +74,8 @@ getBalance:  async(req, res) => {
     tronWeb.setDefaultBlock('latest');
     if (req.query.address && !req.query.address == "") {
         await  tronWeb.trx.getBalance(req.query.address).then(output => {
-            let response = '{"status":"true", "address": "'+req.query.address+'", "balance": "'+output.toString()+'"}';
-            res.send(JSON.parse(response));
+            let response = {status:true, address:req.query.address, balance:output.toString()};
+            res.send(response);
         }).catch(err => {
             let response = {status:false, message:"Unable to get Balance Details, Please Try Again!!!"};
             res.send(response);
@@ -96,8 +96,8 @@ getBandwidth: async (req, res) => {
     tronWeb.setDefaultBlock('latest');
     if (req.query.address && !req.query.address == "") {
         await tronWeb.trx.getBandwidth(req.query.address).then(output => {
-        let response = '{"status":"true", "address": "'+req.query.address+'", "bandwidth": '+output.toString()+'}';
-        res.send(JSON.parse(response));
+            let response = {status:true, address:req.query.address, bandwidth:output.toString()};
+            res.send(response);
         }).catch(err => {
             let response = {status:false, message:"Unable to get Account Bandwidth, Please Try Again!!!"};
             res.send(response);
