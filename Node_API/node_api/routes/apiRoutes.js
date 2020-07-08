@@ -684,9 +684,22 @@ router.post('/setPenaltyPercentage', contractController.setPenaltyPercentage);
 router.post('/setWithdrawPenaltyPercentage', contractController.setWithdrawPenaltyPercentage);
 
     /**
+    * @typedef setReferralAddress
+    * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
+    * @property {string} address.required - Add address - eg: zxcvbnmdfghj
+    */
+    /**
+    * @route POST /api/tron/setReferralAddress
+    * @param {setReferralAddress.model} req.body
+    * @group Staking_API
+    * @security Basic Auth
+    */
+router.post('/setReferralAddress', contractController.setReferralAddress);
+
+    /**
     * @typedef setReferralAmount
     * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
-    * @property {number} amount.required - Add number - eg: 4
+    * @property {number} amount.required - Add amount - eg: 4
     */
     /**
     * @route POST /api/tron/setReferralAmount
@@ -724,6 +737,26 @@ router.post('/performStakingToken', contractController.performStakingToken);
 router.post('/withdrawStakingToken', contractController.withdrawStakingToken);
 
     /**
+    * @typedef purchaseTokens
+    */
+    /**
+    * @route POST /api/tron/purchaseTokens
+    * @group Staking_API
+    * @security Basic Auth
+    */
+router.post('/purchaseTokens', contractController.purchaseTokens);
+
+    /**
+    * @typedef myPurchasedTokens
+    */
+    /**
+    * @route POST /api/tron/myPurchasedTokens
+    * @group Staking_API
+    * @security Basic Auth
+    */
+router.post('/myPurchasedTokens', contractController.myPurchasedTokens);
+
+    /**
     * @typedef blacklistStake
     * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
     * @property {bool} status.required - Add status - eg: true or false
@@ -750,7 +783,20 @@ router.post('/blacklistStake', contractController.blacklistStake);
     */
 router.post('/withdrawReferral', contractController.withdrawReferral);
 
-    
+    /**
+    * @typedef claimBonus
+    * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
+    * @property {String} bitAddress.required - Add bitAddress - eg: qwertyuioopoiuytr
+    * @property {String} bitBalance.required - Add bitBalance - eg: 12345
+    */
+    /**
+    * @route POST /api/tron/claimBonus
+    * @param {claimBonus.model} req.body
+    * @group Staking_API
+    * @security Basic Auth
+    */
+router.post('/claimBonus', contractController.claimBonus);
+
 
 
 

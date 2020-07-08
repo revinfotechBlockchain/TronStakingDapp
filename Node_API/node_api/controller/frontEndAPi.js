@@ -47,8 +47,10 @@ module.exports = {
     getbitcoinBalanceByAddress: async (req, res) => {
             if (req.query.address && !req.query.address == "") {
                await axios.get('https://api.blockcypher.com/v1/btc/test3/addrs/'+req.query.address+'/balance').then(async output=>{
-               res.send(output.data);
+                let response = {status:true, data:output.data};
+                res.send(response);
             }).catch(err => {
+                console.log(err)
                 let response = {status:false, message:"Unable to get Balance by Address, Please Try Again!!!"};
                 res.send(response);
             });
@@ -61,7 +63,8 @@ module.exports = {
     getbitcoinTransactionByHash: async (req, res) => {
             if (req.query.hash && !req.query.hash == "") {
                await axios.get('https://api.blockcypher.com/v1/btc/test3/txs/'+req.query.hash).then(async output=>{  
-               res.send(output.data);
+                let response = {status:true, data:output.data};
+                res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Transaction Details by Hash, Please Try Again!!!"};
                 res.send(response);
@@ -75,7 +78,8 @@ module.exports = {
     getbitcoinTransactionByAddress: async (req, res) => {
             if (req.query.address && !req.query.address == "") {
                await axios.get('https://api.blockcypher.com/v1/btc/test3/addrs/'+req.query.address).then(async output=>{
-               res.send(output.data);
+                let response = {status:true, data:output.data};
+                res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Transaction Details by Address, Please Try Again!!!"};
                 res.send(response);
@@ -122,7 +126,7 @@ module.exports = {
 
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getStakingTokenById(req.query.id).call().then(async output => {
-                let response = {status:true, token:output};
+                let response = {status:true, token:output.toString()};
                 res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Staking Token by Id, Please Try Again!!!"};
@@ -225,7 +229,8 @@ module.exports = {
 
         if(req.query.address && !req.query.address == ""){
             await newContract && newContract.getReferralHistory(req.query.address).call().then(async output => {
-                res.send(output);
+                let response = {status:true, address:output};
+                res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Referral History by Address, Please Try Again!!!"};
                 res.send(response);
@@ -247,7 +252,7 @@ module.exports = {
         var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.getInterest().call().then(async output => {
-                let response = {status:true, interest:output};
+                let response = {status:true, interest:output.toString()};
                 res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Staking Address by Id, Please Try Again!!!"};

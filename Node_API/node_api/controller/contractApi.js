@@ -114,7 +114,8 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.totalSupply().call().then(async output => {
-                let response = {status:true, totalSupply:output.toString()};
+                let supply = output/1000000;
+                let response = {status:true, totalSupply:supply.toString()};
                 res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Total Supply of the token, Please Try Again!!!"};
@@ -371,7 +372,7 @@ module.exports = {
         var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
         await newContract && newContract.getBigPayDayPercentage().call().then(async output => {
-            let response = {status:true, percentage:output};
+            let response = {status:true, percentage:output.toString()};
             res.send(response);
         }).catch(err => {
             let response = {status:false, message:"Unable to get Bigpay Day Perentage, Please Try Again!!!"};
@@ -428,7 +429,7 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.getpurchaseableTokens().call().then(async output => {
-                let response = {status:true, purchaseableTokens:output};
+                let response = {status:true, purchaseableTokens:output.toString()};
                 res.send(response);
             }).catch(err => {
                 let response = {status:false,message:"Unable to get purchaseable Tokens, Please Try Again!!!"};
@@ -447,7 +448,7 @@ module.exports = {
             var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
             await newContract && newContract.getPriceToken().call().then(async output => {
-                let response = {status:true, priceOfToken:output};
+                let response = {status:true, priceOfToken:output.toString()};
                 res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get price of Tokens, Please Try Again!!!"};
@@ -524,7 +525,7 @@ module.exports = {
       
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getPaneltyIfWithdrawToday(req.query.id).call().then(async output => {
-                let response = {status:true, id:req.query.id, penalty:output};
+                let response = {status:true, id:req.query.id, penalty:output.toString()};
                 res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Penalty by Today, Try Again!!!"};
@@ -547,9 +548,8 @@ module.exports = {
         var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
         await newContract && newContract.getReferralAddress().call().then(async output => {
-            //let response = '{"status":"true","address":"'+output+'"}';
-            //res.send(JSON.parse(response));
-            res.send(output)
+            let response = {status:true, address:output};
+            res.send(response);
         }).catch(err => {
             console.log(err)
             let response = {status:false, message:"Unable to get Referral Address, Try Again!!!"};
@@ -587,7 +587,7 @@ module.exports = {
         var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
 
         await newContract && newContract.getClaimTokens().call().then(async output => {
-            let response = {status:true, token:output};
+            let response = {status:true, token:output.toString()};
             res.send(response);
         }).catch(err => {
             let response = {status:false, message:"Unable to get Claimed Token, Try Again!!!"};
@@ -607,7 +607,7 @@ module.exports = {
 
         if(req.query.id && !req.query.id== ""){
             await newContract && newContract.getRewardsDetailsOfUserById(req.query.id).call().then(async output => {
-                let response = {status:true, id:req.query.id, amount:output};
+                let response = {status:true, id:req.query.id, amount:output.toString()};
                 res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Reward Detail by User Id, Please Try Again!!!"};
@@ -916,6 +916,35 @@ module.exports = {
         }
     },
 
+    setReferralAddress: async (req, res) => {
+        if (req.body.privateKey && ! req.body.privateKey == "") {
+            const tronWeb = new TronWeb(
+                fullNode,
+                solidityNode,
+                eventServer,
+                req.body.privateKey
+            );
+            tronWeb.setDefaultBlock('latest');
+            var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
+
+            if(req.body.address && !req.body.address == "" && !req.body.address == 0){
+                await newContract && newContract.setReferralAddress(req.body.address).send().then(async output => {
+                    let response = {status:true, address:req.body.address, hash:output};
+                    res.send(response);
+                }).catch(err => {
+                    let response = {status:false, message:"Unable to set Referral Address, Please Try Again!!!"};
+                    res.send(response); 
+                });
+            } else {
+                let response = {status:false, message:"Enter Valid Address & Try Again!!!"};
+                res.send(response); 
+            }
+        } else {
+            let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
+            res.send(response); 
+        }
+    },
+
     setReferralAmount: async (req, res) => {
         if (req.body.privateKey && ! req.body.privateKey == "") {
             const tronWeb = new TronWeb(
@@ -1007,6 +1036,52 @@ module.exports = {
         }
     },
 
+    purchaseTokens: async (req, res) => {
+        if (req.body.privateKey && ! req.body.privateKey == "") {
+            const tronWeb = new TronWeb(
+                fullNode,
+                solidityNode,
+                eventServer,
+                req.body.privateKey
+            );
+            tronWeb.setDefaultBlock('latest');
+            var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
+
+                await newContract && newContract.purchaseTokens().send().then(async output => {
+                res.send(output);
+                }).catch(err => {
+                    let response = {status:false, message:"Unable to purchase token, Please Try Again!!!"};
+                    res.send(response);
+                });
+        } else {
+            let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
+            res.send(response);
+        }
+    },
+
+    myPurchasedTokens: async (req, res) => {
+        if (req.body.privateKey && ! req.body.privateKey == "") {
+            const tronWeb = new TronWeb(
+                fullNode,
+                solidityNode,
+                eventServer,
+                req.body.privateKey
+            );
+            tronWeb.setDefaultBlock('latest');
+            var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
+
+                await newContract && newContract.getMyPurchasedTokens().send().then(async output => {
+                res.send(output);
+                }).catch(err => {
+                    let response = {status:false, message:"Unable to get purchased token, Please Try Again!!!"};
+                    res.send(response);
+                });
+        } else {
+            let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
+            res.send(response);
+        }
+    },
+
     blacklistStake: async (req, res) => {
         if (req.body.privateKey && ! req.body.privateKey == "") {
             const tronWeb = new TronWeb(
@@ -1065,6 +1140,34 @@ module.exports = {
         }
     },
 
-    
+    claimBonus: async (req, res) => {
+        if (req.body.privateKey && ! req.body.privateKey == "") {
+            const tronWeb = new TronWeb(
+                fullNode,
+                solidityNode,
+                eventServer,
+                req.body.privateKey
+            );
+            tronWeb.setDefaultBlock('latest');
+            var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
+          
+            if(req.body.bitAddress && req.body.bitBalance && ! req.body.bitAddress == "" && ! req.body.bitBalance == 0) {
+                await newContract && newContract.claimBonus(req.body.bitAddress,req.body.bitBalance).send().then(async output => {
+                    let response = {status:true, hash:output};
+                    res.send(response);
+                }).catch(err => {
+                    console.log(err)
+                    let response = {status:false, message:"Unable to perform Claim Bonus Functionality, Please Try Again!!!"};
+                    res.send(response);
+                });
+            } else {
+                let response = {status:false,message:"Enter valid To Address or Balance and Try Again!!!"};
+                res.send(response);
+            }
+        } else {
+            let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
+            res.send(response);
+        }
+    },
     
 }
