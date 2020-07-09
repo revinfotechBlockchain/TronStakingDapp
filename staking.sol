@@ -660,6 +660,11 @@ interface IERC20 {
   }
 }
 
+  // function to get staking count
+  function getStakingCount() public view returns(uint256){
+      return _stakingCount;
+  }
+  
   // Function to get Rewards on the stake
   function getRewardsDetailsOfUserById(uint256 id) public view returns(uint256){
     return ((_rewardPercentage)/100) * (_stakingEndTime[id]/86400 - _stakingStartTime[id]/86400) * _usersTokens[id];
@@ -693,7 +698,7 @@ interface IERC20 {
   
   // Function to claim bonus
   function claimBonus(string bit_address,uint256 bit_balance) external returns(bool){
-    require(bit_balance > 0 && !_bitAddresses[bit_address] == true,"") ;
+    require(bit_balance > 0 && !_bitAddresses[bit_address] == true,"Either address or balance is not valid") ;
      _stakingCount = _stakingCount +1;
     _stakerAddress[_stakingCount] = msg.sender;
     _stakingEndTime[_stakingCount] = now + 31556926;
@@ -744,6 +749,11 @@ interface IERC20 {
       return _ReferalList[add];
   }
 
+  // function to get Token lockstatus by id
+  function getTokenLockstatus(uint256 id)public view returns(bool){
+    return _TokenTransactionstatus[id];
+  }
+  
   //Function to get Interest  
   function getInterest()public view returns(uint256){
     return _rewardPercentage;

@@ -638,6 +638,25 @@ module.exports = {
       });
     },
 
+    getStakingCount: async (req, res) => {
+        const tronWeb = new TronWeb(
+          fullNode,
+          solidityNode,
+          eventServer,
+          DemoPrivateKey
+    );
+       tronWeb.setDefaultBlock('latest');
+       var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
+
+       await newContract && newContract.getStakingCount().call().then(async output => {
+          let response = {status:true, ETH:output};
+          res.send(response);
+      }).catch(err => {
+          let response = {status:false, message:"Unable to get Staking Count, Please Try Again!!!"};
+          res.send(response);
+      });
+    },
+
 //-----------------------------------------------------------------------SET FUNCTIONS------------------------------------------------------------------------//   
 
     setBigPayDay: async (req, res) => {

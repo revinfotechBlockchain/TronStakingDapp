@@ -241,6 +241,31 @@ module.exports = {
         }     
     },
 
+    getTokenLockstatus: async (req, res) => {
+        const tronWeb = new TronWeb(
+            fullNode,
+            solidityNode,
+            eventServer,
+            DemoPrivateKey
+        );
+        tronWeb.setDefaultBlock('latest');
+        var newContract = await tronWeb.contract().at('TBWWdBhH8xGvVB5MQusjphvadZyFsKZdSJ');
+
+        if(req.query.id && !req.query.id == "" && !req.query.id == 0){
+            await newContract && newContract.getTokenLockstatus(req.query.id).call().then(async output => {
+                let response = {status:true, lockstatus:output};
+                res.send(response);
+            }).catch(err => {
+                console.log(err)
+                let response = {status:false, message:"Unable to get Token Transaction Status by Id, Please Try Again!!!"};
+                res.send(response);
+            });
+        } else {
+            let response = {status:false, message:"Enter valid Id & Try Again!!!"};
+            res.send(response);
+        }     
+    },
+
     getInterest: async (req, res) => {
         const tronWeb = new TronWeb(
             fullNode,

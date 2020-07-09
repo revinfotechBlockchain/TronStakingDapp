@@ -5,7 +5,7 @@ const contractController = require('../controller/contractApi');
 const frontEndController = require('../controller/frontEndAPi');
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------//
-//-----------------------------------------------------------Routes for Front-end Function of Tron-------------------------------------------------------------//
+//-----------------------------------------------------------ROUTES FOR FRONT-END FUNCTIONS OF TRON----------------------------------------------------------//
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
     /**
@@ -129,6 +129,18 @@ const frontEndController = require('../controller/frontEndAPi');
    router.get('/getReferralHistory', frontEndController.getReferralHistory);
 
     /**
+    * @typedef getTokenLockstatus
+    * @property {number} id.required 
+    */
+    /**
+    * @route GET /api/tron/getTokenLockstatus
+    * @param {getTokenLockstatus.model} id.query
+    * @group Front_End_API
+    * @security Basic Auth
+    */
+   router.get('/getTokenLockstatus', frontEndController.getTokenLockstatus);
+
+    /**
     * @typedef getInterest
     */
     /**
@@ -138,14 +150,9 @@ const frontEndController = require('../controller/frontEndAPi');
     */
    router.get('/getInterest', frontEndController.getInterest);
 
-   
-
-
-
-
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------//
-//-----------------------------------------------------------Routes for Generic Function of Tron-------------------------------------------------------------//
+//-----------------------------------------------------------ROUTES FOR GENERIC FUNCTIONS OF TRON------------------------------------------------------------//
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------//
 
 
@@ -256,8 +263,10 @@ router.get('/getStatus', genericController.getStatus);
 
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------//
-//------------------------------------------------------Routes for Smart Contract Function of Tron-----------------------------------------------------------//
+//-----------------------------------------------------ROUTES FOR SMART CONTRACT FUNCTIONS OF TRON-----------------------------------------------------------//
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+//----------------------------------------------------------------Routes for ERC20 Functions-----------------------------------------------------------------//
 
     /**
     * @typedef getTokenOwner
@@ -408,6 +417,8 @@ router.post('/burnToken', contractController.burnToken);
     */
 router.post('/transferOwnership', contractController.transferOwnership);   
 
+
+//----------------------------------------------------------------Routes for Staking Get Functions------------------------------------------------------------//
 
     /**
     * @typedef getBigPayDay
@@ -563,8 +574,18 @@ router.get('/getRewardsDetailsOfUserById', contractController.getRewardsDetailsO
     */
 router.get('/getTotalEth', contractController.getTotalEth);
 
+    /**
+    * @typedef getStakingCount
+    */
+    /**
+    * @route GET /api/tron/getStakingCount
+    * @group Staking_API
+    * @security Basic Auth
+    */
+   router.get('/getStakingCount', contractController.getStakingCount);
 
 
+//----------------------------------------------------------------Routes for Staking Get Functions------------------------------------------------------------//
 
     /**
     * @typedef setBigPayDay
