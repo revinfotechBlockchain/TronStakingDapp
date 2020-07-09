@@ -649,7 +649,7 @@ module.exports = {
        var newContract = await tronWeb.contract().at('TF3nNpi3Zd6UNLonpLdUbVenHrSyzkU1nH');
 
        await newContract && newContract.getStakingCount().call().then(async output => {
-          let response = {status:true, ETH:output};
+          let response = {status:true, count:output.toString()};
           res.send(response);
       }).catch(err => {
           let response = {status:false, message:"Unable to get Staking Count, Please Try Again!!!"};
