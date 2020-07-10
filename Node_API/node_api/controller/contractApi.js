@@ -123,6 +123,26 @@ module.exports = {
             });
     },
 
+    getContractTrxBalance: async (req, res) => {
+        const tronWeb = new TronWeb(
+            fullNode,
+            solidityNode,
+            eventServer,
+            DemoPrivateKey
+        );
+        tronWeb.setDefaultBlock('latest');
+        var newContract = await tronWeb.contract().at('TF3nNpi3Zd6UNLonpLdUbVenHrSyzkU1nH');
+
+        await newContract && newContract.getContractTrxBalance().call().then(async output => {
+            let supply = output/1000000;
+            let response = {status:true, balance:supply.toString()};
+            res.send(response);
+        }).catch(err => {
+            let response = {status:false, message:"Unable to get Contract TRX Balance, Please Try Again!!!"};
+            res.send(response);
+        });
+    },
+
     approveToken: async (req, res) => {
         if (req.body.privateKey && ! req.body.privateKey == "") {
             const tronWeb = new TronWeb(

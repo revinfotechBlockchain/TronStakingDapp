@@ -321,6 +321,16 @@ router.get('/getTokenSymbol', contractController.getTokenSymbol);
 router.get('/getTokenTotalSupply', contractController.getTokenTotalSupply);
 
     /**
+    * @typedef getContractTrxBalance
+    */
+    /**
+    * @route GET /api/tron/getContractTrxBalance
+    * @group Smart_Contract_API
+    * @security Basic Auth
+    */
+router.get('/getContractTrxBalance', contractController.getContractTrxBalance);
+
+    /**
     * @typedef approveToken
     * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
     * @property {String} address.required - Add address - eg: qehdhakdajdoadh

@@ -328,7 +328,11 @@ interface IERC20 {
       emit Transfer(address(0), msg.sender, value);
       return true;
     }
-
+    
+    //Get TRX balance from this contract 
+    function getContractTrxBalance() public view returns(uint256){
+      return(address(this).balance);
+    }
 
   /*
   * ----------------------------------------------------------------------------------------------------------------------------------------------
