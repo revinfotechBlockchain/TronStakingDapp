@@ -370,6 +370,9 @@ interface IERC20 {
   
   // mapping for open order tRX
   mapping(address=>uint256) private _openOrderTrxAmountByAddress;
+  
+  // mapping for trx deposited by user 
+  mapping(address=>uint256) _trxDepositedByUser;
 
   // Reward Percentage
   uint256 private _rewardPercentage;
@@ -398,8 +401,8 @@ interface IERC20 {
   // variable for BigPayDay Percentage
   uint256 private _bigPayDayPercentage = 100;
   
-  // variable for Total ETH
-  uint256 private _totalEth;
+  // variable for Total TRX
+  uint256 private _totalTrx;
   
   // modifier to check the user for staking || Re-enterance Guard
   modifier validatorForStaking(uint256 tokens, uint256 time){
@@ -578,12 +581,13 @@ interface IERC20 {
   function purchaseTokens() external payable payableCheck returns(bool){
     _myPurchasedTokens[msg.sender] = _myPurchasedTokens[msg.sender] + msg.value * _tokenPriceTRX/100;
     _openOrderTrxAmountByAddress[msg.sender] = msg.value;
-    _totalEth = _totalEth +msg.value;
+    _totalTrx = _totalTrx +msg.value;
+    _trxDepositedByUser[msg.sender] = msg.value;
     return true;
   }
   
-  // funtion to get purchased token 
-  function getMyPurchasedTokens() external returns(bool){
+  // funtion to withdraw purchased token 
+  function withdrawPurchasedToken() external returns(bool){
     require(_myPurchasedTokens[msg.sender]>0,"You do not have any purchased token");
     _transfer(_purchaseableTokensAddress, msg.sender, _myPurchasedTokens[msg.sender]);
     _myPurchasedTokens[msg.sender]= 0;
@@ -591,10 +595,20 @@ interface IERC20 {
     return true;
   }
   
+  //function to get purchased token 
+  function getMyPurchasedTokens(address add) public view returns(uint256){
+    return _myPurchasedTokens[add];
+  }
+  
+  // function to get TRX deposit amount by address
+  function getTrxAmountByAddress(address add) public view returns(uint256){
+    return _trxDepositedByUser[add];
+  }
+  
   // function to total ETH
-  function getTotalEth() public view returns(uint256){
-    return _totalEth;
-    }
+  function getTotalTrx() public view returns(uint256){
+    return _totalTrx;
+  }
   
   /*
   * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

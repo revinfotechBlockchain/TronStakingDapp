@@ -575,14 +575,14 @@ router.get('/getClaimTokens', contractController.getClaimTokens);
 router.get('/getRewardsDetailsOfUserById', contractController.getRewardsDetailsOfUserById);  
 
     /**
-    * @typedef getTotalEth
+    * @typedef getTotalTrx
     */
     /**
-    * @route GET /api/tron/getTotalEth
+    * @route GET /api/tron/getTotalTrx
     * @group Staking_API
     * @security Basic Auth
     */
-router.get('/getTotalEth', contractController.getTotalEth);
+router.get('/getTotalTrx', contractController.getTotalTrx);
 
     /**
     * @typedef getStakingCount
@@ -592,7 +592,31 @@ router.get('/getTotalEth', contractController.getTotalEth);
     * @group Staking_API
     * @security Basic Auth
     */
-   router.get('/getStakingCount', contractController.getStakingCount);
+router.get('/getStakingCount', contractController.getStakingCount);
+
+    /**
+    * @typedef getMyPurchasedTokens
+    * @property {String} address.required - Add id - eg: 1
+    */
+    /**
+    * @route GET /api/tron/getMyPurchasedTokens
+    * @param {getMyPurchasedTokens.model} address.query
+    * @group Staking_API
+    * @security Basic Auth
+    */
+router.get('/getMyPurchasedTokens', contractController.getMyPurchasedTokens);
+
+    /**
+    * @typedef getTrxAmountByAddress
+    * @property {String} address.required - Add id - eg: 1
+    */
+    /**
+    * @route GET /api/tron/getTrxAmountByAddress
+    * @param {getTrxAmountByAddress.model} address.query
+    * @group Staking_API
+    * @security Basic Auth
+    */
+router.get('/getTrxAmountByAddress', contractController.getTrxAmountByAddress);
 
 
 //----------------------------------------------------------------Routes for Staking Get Functions------------------------------------------------------------//
@@ -778,14 +802,14 @@ router.post('/withdrawStakingToken', contractController.withdrawStakingToken);
 router.post('/purchaseTokens', contractController.purchaseTokens);
 
     /**
-    * @typedef myPurchasedTokens
+    * @typedef withdrawPurchasedToken
     */
     /**
-    * @route POST /api/tron/myPurchasedTokens
+    * @route POST /api/tron/withdrawPurchasedToken
     * @group Staking_API
     * @security Basic Auth
     */
-router.post('/myPurchasedTokens', contractController.myPurchasedTokens);
+router.post('/withdrawPurchasedToken', contractController.withdrawPurchasedToken);
 
     /**
     * @typedef blacklistStake
