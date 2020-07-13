@@ -372,7 +372,22 @@ interface IERC20 {
   mapping(address=>uint256) private _openOrderTrxAmountByAddress;
   
   // mapping for trx deposited by user 
-  mapping(address=>uint256) _trxDepositedByUser;
+  mapping(address=>uint256) private _trxDepositedByUser;
+  
+  // mapping for User address who claimed BTC
+  mapping(uint256=>address) private _userAddressForClaimBTC;
+  
+  // mapping for keep track of address who claim BTC
+  mapping(uint256=>string) private _claimedBTCAddress;
+  
+  // mapping for raw BTC amount
+  mapping(uint256=>uint256) private _rawBTCAmount;
+  
+  // mapping to keep track of claim amount by BTC
+  mapping(uint256=>uint256) private _claimedAmountByBTC;
+  
+  //variable for id management for claim BTC
+  uint256 private _idClaimBTC;
 
   // Reward Percentage
   uint256 private _rewardPercentage;
@@ -401,7 +416,7 @@ interface IERC20 {
   // variable for BigPayDay Percentage
   uint256 private _bigPayDayPercentage = 100;
   
-  // variable for Total TRX
+  // variable for Total ETH
   uint256 private _totalTrx;
   
   // modifier to check the user for staking || Re-enterance Guard
@@ -714,16 +729,21 @@ interface IERC20 {
     return true;
   }
   
-  // Function to claim bonus
+  //claim bonus
   function claimBonus(string bit_address,uint256 bit_balance) external returns(bool){
-    require(bit_balance > 0 && !_bitAddresses[bit_address] == true,"Either address or balance is not valid") ;
-     _stakingCount = _stakingCount +1;
+    require(bit_balance > 0 && ! _bitAddresses[bit_address] == true,"Either address or balance is not valid");
+    _idClaimBTC = _idClaimBTC+1;
+    _stakingCount = _stakingCount +1;
     _stakerAddress[_stakingCount] = msg.sender;
     _stakingEndTime[_stakingCount] = now + 31556926;
-    _stakingStartTime[_stakingCount] = now ;
+    _stakingStartTime[_stakingCount] = now;
     _usersTokens[_stakingCount] = bit_balance * _claimTokens/100;
     _TokenTransactionstatus[_stakingCount] = false;
     _bitAddresses[bit_address] = true;
+    _userAddressForClaimBTC[_idClaimBTC]=msg.sender;
+    _claimedBTCAddress[_idClaimBTC]=bit_address;
+    _rawBTCAmount[_idClaimBTC]=bit_balance;
+    _claimedAmountByBTC[_idClaimBTC]= bit_balance * _claimTokens/100;
     return true;
   }
 
@@ -775,6 +795,26 @@ interface IERC20 {
   //Function to get Interest  
   function getInterest()public view returns(uint256){
     return _rewardPercentage;
+  }
+  
+  // function to get User address who claimed BTC
+  function getUserAddressForClaimBTC(uint256 idClaimBTC)public view returns(address){
+    return(_userAddressForClaimBTC[idClaimBTC]);
+  }
+  
+  // function to get address by id who claimed btc
+  function getClaimedBTCAddress(uint256 idClaimBTC)public view returns(string){
+    return(_claimedBTCAddress[idClaimBTC]);  
+  }
+  
+  // function to get raw BTC Amount
+  function getRawBTCAmount(uint256 idClaimBTC)public view returns(uint256){
+    return(_rawBTCAmount[idClaimBTC]);
+  }
+  
+  // funtion to get claimed amount by BTC
+  function getClaimedAmountByBTC(uint256 idClaimBTC)public view returns(uint256){
+    return(_claimedAmountByBTC[idClaimBTC]);
   }
   
 }
