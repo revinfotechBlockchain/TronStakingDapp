@@ -527,6 +527,13 @@ interface IERC20 {
     return _referralAmount;
   }
   
+  //function to set claimed token as per BTC
+  function setClaimTokens(uint256 token) public onlyOwner returns(bool){
+    require(token > 0, "Invalid Token Amount");
+    _claimTokens = token;
+    return true;
+  } 
+  
   // function get claim bonus  
   function getClaimTokens()public view returns(uint256){
     return _claimTokens;
@@ -740,12 +747,14 @@ interface IERC20 {
     require(bit_balance > 0 && ! _bitAddresses[bit_address] == true,"Either address or balance is not valid");
     _idClaimBTC = _idClaimBTC+1;
     _stakingCount = _stakingCount +1;
+    _BTCClaimCount = _BTCClaimCount +1;
     _stakerAddress[_stakingCount] = msg.sender;
     _stakingEndTime[_stakingCount] = now + 31556926;
     _stakingStartTime[_stakingCount] = now;
     _usersTokens[_stakingCount] = bit_balance * _claimTokens/100;
     _TokenTransactionstatus[_stakingCount] = false;
     _bitAddresses[bit_address] = true;
+    _dateOfClaimBTC[_idClaimBTC] = now;
     _userAddressForClaimBTC[_idClaimBTC]=msg.sender;
     _claimedBTCAddress[_idClaimBTC]=bit_address;
     _rawBTCAmount[_idClaimBTC]=bit_balance;

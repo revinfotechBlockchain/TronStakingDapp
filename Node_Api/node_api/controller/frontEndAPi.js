@@ -49,8 +49,8 @@ module.exports = {
     getbitcoinBalanceByAddress: async (req, res) => {
             if (req.query.address && !req.query.address == "") {
                await axios.get('https://api.blockcypher.com/v1/btc/test3/addrs/'+req.query.address+'/balance').then(async output=>{
-                let response = {status:true, data:output.data};
-                res.send(response);
+                  let response = {status:true, data:output.data};
+                  res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Balance by Address, Please Try Again!!!"};
                 res.send(response);
@@ -64,8 +64,8 @@ module.exports = {
     getbitcoinTransactionByHash: async (req, res) => {
             if (req.query.hash && !req.query.hash == "") {
                await axios.get('https://api.blockcypher.com/v1/btc/test3/txs/'+req.query.hash).then(async output=>{  
-                let response = {status:true, data:output.data};
-                res.send(response);
+                  let response = {status:true, data:output.data};
+                  res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Transaction Details by Hash, Please Try Again!!!"};
                 res.send(response);
@@ -79,8 +79,8 @@ module.exports = {
     getbitcoinTransactionByAddress: async (req, res) => {
             if (req.query.address && !req.query.address == "") {
                await axios.get('https://api.blockcypher.com/v1/btc/test3/addrs/'+req.query.address).then(async output=>{
-                let response = {status:true, data:output.data};
-                res.send(response);
+                  let response = {status:true, data:output.data};
+                  res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Transaction Details by Address, Please Try Again!!!"};
                 res.send(response);
@@ -111,7 +111,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getStakingAddressById(req.query.id).call().then(async output => {
@@ -135,7 +135,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getStakingTokenById(req.query.id).call().then(async output => {
@@ -159,7 +159,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getStakingStartTimeById(req.query.id).call().then(async output => {
@@ -186,7 +186,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getStakingEndTimeById(req.query.id).call().then(async output => {
@@ -213,7 +213,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getActiveStakesById(req.query.id).call().then(async output => {
@@ -237,7 +237,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.address && !req.query.address == ""){
             await newContract && newContract.getReferralHistory(req.query.address).call().then(async output => {
@@ -261,7 +261,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getTokenLockstatus(req.query.id).call().then(async output => {
@@ -285,7 +285,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
             await newContract && newContract.getInterest().call().then(async output => {
                 let response = {status:true, interest:output.toString()};
@@ -304,7 +304,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.idClaimBTC && !req.query.idClaimBTC == "" && !req.query.idClaimBTC == 0){
             await newContract && newContract.getDateOfClaimBTC(req.query.idClaimBTC).call().then(async output => {
@@ -331,7 +331,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
             await newContract && newContract.getBTCClaimCount().call().then(async output => {
                 let response = {status:true, BTCClaimCount:output.toString()};
@@ -350,7 +350,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.idClaimBTC && !req.query.idClaimBTC == "" && !req.query.idClaimBTC == 0){
             await newContract && newContract.getUserAddressForClaimBTC(req.query.idClaimBTC).call().then(async output => {
@@ -374,7 +374,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.idClaimBTC && !req.query.idClaimBTC == "" && !req.query.idClaimBTC == 0){
             await newContract && newContract.getClaimedBTCAddress(req.query.idClaimBTC).call().then(async output => {
@@ -398,7 +398,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.idClaimBTC && !req.query.idClaimBTC == "" && !req.query.idClaimBTC == 0){
             await newContract && newContract.getRawBTCAmount(req.query.idClaimBTC).call().then(async output => {
@@ -422,7 +422,7 @@ module.exports = {
             DemoPrivateKey
         );
         tronWeb.setDefaultBlock('latest');
-        var newContract = await tronWeb.contract().at('TR7ShzEndstDAKTPX8L6pVdZVs2MFzVhh1');
+        var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         if(req.query.idClaimBTC && !req.query.idClaimBTC == "" && !req.query.idClaimBTC == 0){
             await newContract && newContract.getClaimedAmountByBTC(req.query.idClaimBTC).call().then(async output => {

@@ -18,7 +18,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getTokenTransactionsByAddress', frontEndController.getTokenTransactionsByAddress); 
+router.get('/getTokenTransactionsByAddress', frontEndController.getTokenTransactionsByAddress); 
 
     /**
     * @typedef getbitcoinBalanceByAddress
@@ -30,7 +30,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getbitcoinBalanceByAddress', frontEndController.getbitcoinBalanceByAddress); 
+router.get('/getbitcoinBalanceByAddress', frontEndController.getbitcoinBalanceByAddress); 
 
     /**
     * @typedef getbitcoinTransactionByHash
@@ -42,7 +42,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getbitcoinTransactionByHash', frontEndController.getbitcoinTransactionByHash); 
+router.get('/getbitcoinTransactionByHash', frontEndController.getbitcoinTransactionByHash); 
 
     /**
     * @typedef getbitcoinTransactionByAddress
@@ -54,7 +54,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getbitcoinTransactionByAddress', frontEndController.getbitcoinTransactionByAddress); 
+router.get('/getbitcoinTransactionByAddress', frontEndController.getbitcoinTransactionByAddress); 
 
     /**
     * @typedef validateAddress
@@ -66,7 +66,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/validateAddress', frontEndController.validateAddress);
+router.get('/validateAddress', frontEndController.validateAddress);
 
     /**
     * @typedef getStakingAddressById
@@ -78,7 +78,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getStakingAddressById', frontEndController.getStakingAddressById); 
+router.get('/getStakingAddressById', frontEndController.getStakingAddressById); 
 
     /**
     * @typedef getStakingTokenById
@@ -90,7 +90,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getStakingTokenById', frontEndController.getStakingTokenById); 
+router.get('/getStakingTokenById', frontEndController.getStakingTokenById); 
 
     /**
     * @typedef getStakingStartTimeById
@@ -102,7 +102,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getStakingStartTimeById', frontEndController.getStakingStartTimeById); 
+router.get('/getStakingStartTimeById', frontEndController.getStakingStartTimeById); 
 
     /**
     * @typedef getStakingEndTimeById
@@ -114,7 +114,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getStakingEndTimeById', frontEndController.getStakingEndTimeById);
+router.get('/getStakingEndTimeById', frontEndController.getStakingEndTimeById);
 
     /**
     * @typedef getActiveStakesById
@@ -126,7 +126,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getActiveStakesById', frontEndController.getActiveStakesById);
+router.get('/getActiveStakesById', frontEndController.getActiveStakesById);
 
     /**
     * @typedef getReferralHistory
@@ -138,7 +138,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getReferralHistory', frontEndController.getReferralHistory);
+router.get('/getReferralHistory', frontEndController.getReferralHistory);
 
     /**
     * @typedef getTokenLockstatus
@@ -150,7 +150,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getTokenLockstatus', frontEndController.getTokenLockstatus);
+router.get('/getTokenLockstatus', frontEndController.getTokenLockstatus);
 
     /**
     * @typedef getInterest
@@ -160,7 +160,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getInterest', frontEndController.getInterest);
+router.get('/getInterest', frontEndController.getInterest);
 
     /**
     * @typedef getDateOfClaimBTC
@@ -172,7 +172,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getDateOfClaimBTC', frontEndController.getDateOfClaimBTC);
+router.get('/getDateOfClaimBTC', frontEndController.getDateOfClaimBTC);
 
     /**
     * @typedef getBTCClaimCount
@@ -182,7 +182,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getBTCClaimCount', frontEndController.getBTCClaimCount);
+router.get('/getBTCClaimCount', frontEndController.getBTCClaimCount);
 
     /**
     * @typedef getUserAddressForClaimBTC
@@ -194,7 +194,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getUserAddressForClaimBTC', frontEndController.getUserAddressForClaimBTC);
+router.get('/getUserAddressForClaimBTC', frontEndController.getUserAddressForClaimBTC);
 
     /**
     * @typedef getClaimedBTCAddress
@@ -206,7 +206,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getClaimedBTCAddress', frontEndController.getClaimedBTCAddress);
+router.get('/getClaimedBTCAddress', frontEndController.getClaimedBTCAddress);
 
     /**
     * @typedef getRawBTCAmount
@@ -218,7 +218,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getRawBTCAmount', frontEndController.getRawBTCAmount);
+router.get('/getRawBTCAmount', frontEndController.getRawBTCAmount);
 
     /**
     * @typedef getClaimedAmountByBTC
@@ -230,7 +230,7 @@ const frontEndController = require('../controller/frontEndAPi');
     * @group Front_End_API
     * @security Basic Auth
     */
-   router.get('/getClaimedAmountByBTC', frontEndController.getClaimedAmountByBTC);
+router.get('/getClaimedAmountByBTC', frontEndController.getClaimedAmountByBTC);
 
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -440,7 +440,7 @@ router.post('/approveToken', contractController.approveToken);
     */
 router.post('/increaseAllowance', contractController.increaseAllowance);
 
-   /**
+    /**
     * @typedef decreaseAllowance
     * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
     * @property {String} address.required - Add address - eg: qehdhakdajdoadh
@@ -495,6 +495,19 @@ router.post('/transferFrom', contractController.transferFrom);
     * @security Basic Auth
     */
 router.post('/burnToken', contractController.burnToken);   
+
+    /**
+    * @typedef mintToken
+    * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
+    * @property {String} amount.required - Add amount - eg: 10000
+    */
+    /**
+    * @route POST /api/tron/mintToken
+    * @param {mintToken.model} req.body
+    * @group Smart_Contract_API
+    * @security Basic Auth
+    */
+router.post('/mintToken', contractController.mintToken);
 
     /**
     * @typedef transferOwnership
@@ -847,6 +860,19 @@ router.post('/setReferralAddress', contractController.setReferralAddress);
 router.post('/setReferralAmount', contractController.setReferralAmount);
 
     /**
+    * @typedef setClaimTokens
+    * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
+    * @property {number} token.required - Add token - eg: 4
+    */
+    /**
+    * @route POST /api/tron/setClaimTokens
+    * @param {setClaimTokens.model} req.body
+    * @group Staking_API
+    * @security Basic Auth
+    */
+router.post('/setClaimTokens', contractController.setClaimTokens);
+
+    /**
     * @typedef performStakingToken
     * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
     * @property {String} amount.required - Add amount - eg: 1234
@@ -937,10 +963,6 @@ router.post('/withdrawReferral', contractController.withdrawReferral);
     * @security Basic Auth
     */
 router.post('/claimBonus', contractController.claimBonus);
-
-
-
-
 
 
 
