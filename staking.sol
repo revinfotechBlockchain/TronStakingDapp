@@ -804,7 +804,7 @@ interface IERC20 {
   }
   
   // funtion to get date of claimed BTC
-  function dateOfClaimBTC(uint256 idClaimBTC)public view returns(uint256){
+  function getDateOfClaimBTC(uint256 idClaimBTC)public view returns(uint256){
     return(_dateOfClaimBTC[idClaimBTC]);
   }
 
