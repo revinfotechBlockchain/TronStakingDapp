@@ -602,10 +602,10 @@ module.exports = {
         var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         await newContract && newContract.getReferralAddress().call().then(async output => {
-            let response = {status:true, address:output};
+            const address = tronWeb.address.fromHex(output);
+            let response = {status:true, address:address};
             res.send(response);
         }).catch(err => {
-            console.log(err)
             let response = {status:false, message:"Unable to get Referral Address, Try Again!!!"};
             res.send(response);
         });
@@ -780,7 +780,6 @@ module.exports = {
                     let response = {status:true, day:time, hash:output};
                     res.send(response);
                 }).catch(err => {
-                    console.log(err)
                     let response = {status:false, message:"Unable to set Bigpay day date, Please Try Again!!!"};
                     res.send(response); 
                 });
@@ -812,7 +811,6 @@ module.exports = {
                     let response = {status:true, hash:output};
                     res.send(response);
                 }).catch(err => {
-                    console.log(err)
                     let response = {status:false, message:"Unable to set Bigpay day percentage, Please Try Again!!!"};
                     res.send(response); 
                 });
@@ -1304,7 +1302,6 @@ module.exports = {
                     let response = {status:true, hash:output};
                     res.send(response);
                 }).catch(err => {
-                    console.log(err)
                     let response = {status:false, message:"Unable to perform Claim Bonus Functionality, Please Try Again!!!"};
                     res.send(response);
                 });
