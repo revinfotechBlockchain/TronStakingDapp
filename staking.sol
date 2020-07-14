@@ -386,6 +386,9 @@ interface IERC20 {
   // mapping to keep track of claim amount by BTC
   mapping(uint256=>uint256) private _claimedAmountByBTC;
   
+  // mappimg for claim date for BTC
+  mapping(uint256=>uint256)_dateOfClaimBTC;
+  
   //variable for id management for claim BTC
   uint256 private _idClaimBTC;
 
@@ -418,6 +421,9 @@ interface IERC20 {
   
   // variable for Total ETH
   uint256 private _totalTrx;
+  
+  // variable to track count of BTC Claimed
+  uint256 private _BTCClaimCount;
   
   // modifier to check the user for staking || Re-enterance Guard
   modifier validatorForStaking(uint256 tokens, uint256 time){
@@ -795,6 +801,16 @@ interface IERC20 {
   //Function to get Interest  
   function getInterest()public view returns(uint256){
     return _rewardPercentage;
+  }
+  
+  // funtion to get date of claimed BTC
+  function dateOfClaimBTC(uint256 idClaimBTC)public view returns(uint256){
+    return(_dateOfClaimBTC[idClaimBTC]);
+  }
+
+  // function to get BTC Claimed Count
+  function getBTCClaimCount()public view returns(uint256){
+    return(_BTCClaimCount);
   }
   
   // function to get User address who claimed BTC
