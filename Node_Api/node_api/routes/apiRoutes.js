@@ -57,6 +57,18 @@ const frontEndController = require('../controller/frontEndAPi');
    router.get('/getbitcoinTransactionByAddress', frontEndController.getbitcoinTransactionByAddress); 
 
     /**
+    * @typedef validateAddress
+    * @property {String} address.required - Add address - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
+    */
+    /**
+    * @route GET /api/tron/validateAddress
+    * @param {validateAddress.model} address.query
+    * @group Front_End_API
+    * @security Basic Auth
+    */
+   router.get('/validateAddress', frontEndController.validateAddress);
+
+    /**
     * @typedef getStakingAddressById
     * @property {number} id.required - Add id - eg: 1
     */
@@ -149,6 +161,76 @@ const frontEndController = require('../controller/frontEndAPi');
     * @security Basic Auth
     */
    router.get('/getInterest', frontEndController.getInterest);
+
+    /**
+    * @typedef getDateOfClaimBTC
+    * @property {number} idClaimBTC.required 
+    */
+    /**
+    * @route GET /api/tron/getDateOfClaimBTC
+    * @param {getDateOfClaimBTC.model} idClaimBTC.query
+    * @group Front_End_API
+    * @security Basic Auth
+    */
+   router.get('/getDateOfClaimBTC', frontEndController.getDateOfClaimBTC);
+
+    /**
+    * @typedef getBTCClaimCount
+    */
+    /**
+    * @route GET /api/tron/getBTCClaimCount
+    * @group Front_End_API
+    * @security Basic Auth
+    */
+   router.get('/getBTCClaimCount', frontEndController.getBTCClaimCount);
+
+    /**
+    * @typedef getUserAddressForClaimBTC
+    * @property {number} idClaimBTC.required 
+    */
+    /**
+    * @route GET /api/tron/getUserAddressForClaimBTC
+    * @param {getUserAddressForClaimBTC.model} idClaimBTC.query
+    * @group Front_End_API
+    * @security Basic Auth
+    */
+   router.get('/getUserAddressForClaimBTC', frontEndController.getUserAddressForClaimBTC);
+
+    /**
+    * @typedef getClaimedBTCAddress
+    * @property {number} idClaimBTC.required 
+    */
+    /**
+    * @route GET /api/tron/getClaimedBTCAddress
+    * @param {getClaimedBTCAddress.model} idClaimBTC.query
+    * @group Front_End_API
+    * @security Basic Auth
+    */
+   router.get('/getClaimedBTCAddress', frontEndController.getClaimedBTCAddress);
+
+    /**
+    * @typedef getRawBTCAmount
+    * @property {number} idClaimBTC.required 
+    */
+    /**
+    * @route GET /api/tron/getRawBTCAmount
+    * @param {getRawBTCAmount.model} idClaimBTC.query
+    * @group Front_End_API
+    * @security Basic Auth
+    */
+   router.get('/getRawBTCAmount', frontEndController.getRawBTCAmount);
+
+    /**
+    * @typedef getClaimedAmountByBTC
+    * @property {number} idClaimBTC.required 
+    */
+    /**
+    * @route GET /api/tron/getClaimedAmountByBTC
+    * @param {getClaimedAmountByBTC.model} idClaimBTC.query
+    * @group Front_End_API
+    * @security Basic Auth
+    */
+   router.get('/getClaimedAmountByBTC', frontEndController.getClaimedAmountByBTC);
 
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -793,9 +875,11 @@ router.post('/withdrawStakingToken', contractController.withdrawStakingToken);
 
     /**
     * @typedef purchaseTokens
+    * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
     */
     /**
     * @route POST /api/tron/purchaseTokens
+    * @param {purchaseTokens.model} req.body
     * @group Staking_API
     * @security Basic Auth
     */
@@ -803,9 +887,11 @@ router.post('/purchaseTokens', contractController.purchaseTokens);
 
     /**
     * @typedef withdrawPurchasedToken
+    * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
     */
     /**
     * @route POST /api/tron/withdrawPurchasedToken
+    * @param {withdrawPurchasedToken.model} req.body
     * @group Staking_API
     * @security Basic Auth
     */
