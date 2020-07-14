@@ -1165,12 +1165,10 @@ module.exports = {
             );
             tronWeb.setDefaultBlock('latest');
             var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
-            var data = parseFloat(req.body.amount);
-            var amount = (data).toFixed(6)*1000000;
 
-            if(amount && !amount== "" && ! amount == 0 ){
-                await newContract && newContract.withdrawStakedTokens(amount).send().then(async output => {
-                    let response = {status:true, amount:amount, hash:output};
+            if(req.body.stakingId && !req.body.stakingId== "" && ! req.body.stakingId == 0 ){
+                await newContract && newContract.withdrawStakedTokens(req.body.stakingId).send().then(async output => {
+                    let response = {status:true, stakingId:req.body.stakingId, hash:output};
                     res.send(response);
                 }).catch(err => {
                     let response = {status:false, message:"Unable to Withdraw Staked Token , Please Try Again!!!"};

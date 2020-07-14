@@ -4,12 +4,12 @@ const axios = require('axios');
 const WAValidator = require('@swyftx/api-crypto-address-validator')
 
 
-//----------------------MAINNET-----------------------------------
+//------------------------------------------MAINNET----------------------------------------------------//
 // const fullNode = new HttpProvider('https://api.trongrid.io'); // Full node http endpoint
 // const solidityNode = new HttpProvider('https://api.trongrid.io'); // Solidity node http endpoint
 // const eventServer = new HttpProvider('https://api.trongrid.io');
 
-//----------------------TESTNET---------------------------------------------------------------------------
+//------------------------------------------TESTNET----------------------------------------------------//
 var fullNode = new HttpProvider('https://api.shasta.trongrid.io'); // Full node http endpoint
 var solidityNode = new HttpProvider('https://api.shasta.trongrid.io'); // Solidity node http endpoint
 var eventServer = new HttpProvider('https://api.shasta.trongrid.io'); // Contract events http endpoint
@@ -354,7 +354,8 @@ module.exports = {
 
         if(req.query.idClaimBTC && !req.query.idClaimBTC == "" && !req.query.idClaimBTC == 0){
             await newContract && newContract.getUserAddressForClaimBTC(req.query.idClaimBTC).call().then(async output => {
-                let response = {status:true, address:output};
+                const address = tronWeb.address.fromHex(output);
+                let response = {status:true, address:address};
                 res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get User Address for Claimed BTC, Please Try Again!!!"};

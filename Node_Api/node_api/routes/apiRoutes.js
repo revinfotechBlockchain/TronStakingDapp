@@ -34,7 +34,7 @@ router.get('/getbitcoinBalanceByAddress', frontEndController.getbitcoinBalanceBy
 
     /**
     * @typedef getbitcoinTransactionByHash
-    * @property {String} hash.required - Add address - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
+    * @property {String} hash.required - Add hash - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
     */
     /**
     * @route GET /api/tron/getbitcoinTransactionByHash
@@ -118,7 +118,7 @@ router.get('/getStakingEndTimeById', frontEndController.getStakingEndTimeById);
 
     /**
     * @typedef getActiveStakesById
-    * @property {number} id.required 
+    * @property {number} id.required - Add id - eg: 1
     */
     /**
     * @route GET /api/tron/getActiveStakesById
@@ -130,7 +130,7 @@ router.get('/getActiveStakesById', frontEndController.getActiveStakesById);
 
     /**
     * @typedef getReferralHistory
-    * @property {string} address.required 
+    * @property {string} address.required - Add address - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
     */
     /**
     * @route GET /api/tron/getReferralHistory
@@ -142,7 +142,7 @@ router.get('/getReferralHistory', frontEndController.getReferralHistory);
 
     /**
     * @typedef getTokenLockstatus
-    * @property {number} id.required 
+    * @property {number} id.required - Add id - eg: 1
     */
     /**
     * @route GET /api/tron/getTokenLockstatus
@@ -164,7 +164,7 @@ router.get('/getInterest', frontEndController.getInterest);
 
     /**
     * @typedef getDateOfClaimBTC
-    * @property {number} idClaimBTC.required 
+    * @property {number} idClaimBTC.required - Add idClaimBTC - eg: 1
     */
     /**
     * @route GET /api/tron/getDateOfClaimBTC
@@ -186,7 +186,7 @@ router.get('/getBTCClaimCount', frontEndController.getBTCClaimCount);
 
     /**
     * @typedef getUserAddressForClaimBTC
-    * @property {number} idClaimBTC.required 
+    * @property {number} idClaimBTC.required - Add idClaimBTC - eg: 1
     */
     /**
     * @route GET /api/tron/getUserAddressForClaimBTC
@@ -198,7 +198,7 @@ router.get('/getUserAddressForClaimBTC', frontEndController.getUserAddressForCla
 
     /**
     * @typedef getClaimedBTCAddress
-    * @property {number} idClaimBTC.required 
+    * @property {number} idClaimBTC.required - Add idClaimBTC - eg: 1
     */
     /**
     * @route GET /api/tron/getClaimedBTCAddress
@@ -210,7 +210,7 @@ router.get('/getClaimedBTCAddress', frontEndController.getClaimedBTCAddress);
 
     /**
     * @typedef getRawBTCAmount
-    * @property {number} idClaimBTC.required 
+    * @property {number} idClaimBTC.required - Add idClaimBTC - eg: 1
     */
     /**
     * @route GET /api/tron/getRawBTCAmount
@@ -222,7 +222,7 @@ router.get('/getRawBTCAmount', frontEndController.getRawBTCAmount);
 
     /**
     * @typedef getClaimedAmountByBTC
-    * @property {number} idClaimBTC.required 
+    * @property {number} idClaimBTC.required - Add idClaimBTC - eg: 1
     */
     /**
     * @route GET /api/tron/getClaimedAmountByBTC
@@ -889,7 +889,7 @@ router.post('/performStakingToken', contractController.performStakingToken);
     /**
     * @typedef withdrawStakingToken
     * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
-    * @property {String} amount.required - Add amount - eg: 1234
+    * @property {number} stakingId.required - Add stakingId - eg: 1
     */
     /**
     * @route POST /api/tron/withdrawStakingToken
@@ -927,7 +927,7 @@ router.post('/withdrawPurchasedToken', contractController.withdrawPurchasedToken
     * @typedef blacklistStake
     * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
     * @property {bool} status.required - Add status - eg: true or false
-    * @property {number} id.required - Add amount - eg: 1234
+    * @property {number} id.required - Add id - eg: 1
     */
     /**
     * @route POST /api/tron/blacklistStake
