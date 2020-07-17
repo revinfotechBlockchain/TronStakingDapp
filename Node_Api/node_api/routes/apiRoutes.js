@@ -57,6 +57,18 @@ router.get('/getbitcoinTransactionByHash', frontEndController.getbitcoinTransact
 router.get('/getbitcoinTransactionByAddress', frontEndController.getbitcoinTransactionByAddress); 
 
     /**
+    * @typedef decodeBitcoinTransaction
+    * @property {String} tx.required - Add tx - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
+    */
+    /**
+    * @route POST /api/tron/decodeBitcoinTransaction
+    * @param {decodeBitcoinTransaction.model} req.body
+    * @group Front_End_API
+    * @security Basic Auth
+    */
+router.post('/decodeBitcoinTransaction', frontEndController.decodeBitcoinTransaction);
+
+    /**
     * @typedef validateAddress
     * @property {String} address.required - Add address - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
     */

@@ -633,7 +633,7 @@ interface IERC20 {
     return _trxDepositedByUser[add];
   }
   
-  // function to total ETH
+  // function to total TRX
   function getTotalTrx() public view returns(uint256){
     return _totalTrx;
   }

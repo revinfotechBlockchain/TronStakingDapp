@@ -424,7 +424,7 @@ module.exports = {
         var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
         await newContract && newContract.getBigPayDayPercentage().call().then(async output => {
-            let response = {status:true, percentage:output.toString()};
+            let response = {status:true, percentage:output/100};
             res.send(response);
         }).catch(err => {
             let response = {status:false, message:"Unable to get Bigpay Day Perentage, Please Try Again!!!"};
@@ -579,7 +579,7 @@ module.exports = {
       
         if(req.query.id && !req.query.id == "" && !req.query.id == 0){
             await newContract && newContract.getPaneltyIfWithdrawToday(req.query.id).call().then(async output => {
-                let response = {status:true, id:req.query.id, penalty:output.toString()};
+                let response = {status:true, id:req.query.id, penalty:output/100};
                 res.send(response);
             }).catch(err => {
                 let response = {status:false, message:"Unable to get Penalty by Today, Try Again!!!"};
@@ -1137,7 +1137,7 @@ module.exports = {
 
             if(amount && req.body.time && !amount== "" && !req.body.time=="" && ! amount == 0 ){
                 await newContract && newContract.performStaking(amount, req.body.time).send().then(async output => {
-                    let response = {status:true, amount:amount, hash:output};
+                    let response = {status:true, hash:output};
                     res.send(response);
                 }).catch(err => {
                     let response = {status:false, message:"Unable to perform Staking of token, Please Try Again!!!"};
@@ -1193,7 +1193,7 @@ module.exports = {
             tronWeb.setDefaultBlock('latest');
             var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
-                await newContract && newContract.purchaseTokens().send().then(async output => {
+                await newContract && newContract.purchaseTokens().send(1).then(async output => {
                 res.send(output);
                 }).catch(err => {
                     let response = {status:false, message:"Unable to purchase token, Please Try Again!!!"};

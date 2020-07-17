@@ -2,6 +2,7 @@ const TronWeb = require('tronweb');
 const HttpProvider = TronWeb.providers.HttpProvider;
 const axios = require('axios');
 const WAValidator = require('@swyftx/api-crypto-address-validator')
+const txHexDecoder = require("raw-transaction-hex-decoder");
 
 
 //------------------------------------------MAINNET----------------------------------------------------//
@@ -87,6 +88,19 @@ module.exports = {
             });
           } else {
             let response = {status:false, message:"Enter valid Hash & Try Again!!!"};
+            res.send(response);
+        }
+    },
+
+    decodeBitcoinTransaction: async (req, res) => {
+
+    const encodedTx = req.body.tx;
+        if (req.body.tx && !req.body.tx == "") { 
+                const decodedTx = txHexDecoder.decodeRawUTXO(encodedTx);
+                let response = {status:true, decodedtx:decodedTx};
+                res.send(response);
+        } else {
+            let response = {status:false, message:"Enter valid Tx & Try Again!!!"};
             res.send(response);
         }
     },
