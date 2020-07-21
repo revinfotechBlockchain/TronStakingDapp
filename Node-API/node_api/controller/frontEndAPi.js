@@ -3,6 +3,9 @@ const HttpProvider = TronWeb.providers.HttpProvider;
 const axios = require('axios');
 const WAValidator = require('@swyftx/api-crypto-address-validator')
 const txHexDecoder = require("raw-transaction-hex-decoder");
+const bitcoinMessage = require('bitcoinjs-message');
+const Message = require('bitcore-message');
+const bitcore = require('bitcore-lib');
 
 
 //------------------------------------------MAINNET----------------------------------------------------//
@@ -20,6 +23,7 @@ var DemoPrivateKey = "d346e8b191f384a5ae31ca907ccc17ae013ccda576e73412d00b6b4ed9
 module.exports = {
 
     getTokenTransactionsByAddress: async (req, res) => {
+
         var returnData= [];
         if (req.query.address && !req.query.address == "") {
             axios.get('https://api.shasta.trongrid.io/v1/accounts/'+req.query.address+'/transactions/trc20').then(output=>{
@@ -48,6 +52,7 @@ module.exports = {
     },
 
     getbitcoinBalanceByAddress: async (req, res) => {
+
             if (req.query.address && !req.query.address == "") {
                await axios.get('https://api.blockcypher.com/v1/btc/test3/addrs/'+req.query.address+'/balance').then(async output=>{
                   let response = {status:true, data:output.data};
@@ -63,6 +68,7 @@ module.exports = {
     },
 
     getbitcoinTransactionByHash: async (req, res) => {
+
             if (req.query.hash && !req.query.hash == "") {
                await axios.get('https://api.blockcypher.com/v1/btc/test3/txs/'+req.query.hash).then(async output=>{  
                   let response = {status:true, data:output.data};
@@ -78,6 +84,7 @@ module.exports = {
     },
 
     getbitcoinTransactionByAddress: async (req, res) => {
+
             if (req.query.address && !req.query.address == "") {
                await axios.get('https://api.blockcypher.com/v1/btc/test3/addrs/'+req.query.address).then(async output=>{
                   let response = {status:true, data:output.data};

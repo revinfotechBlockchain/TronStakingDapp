@@ -914,6 +914,7 @@ router.post('/withdrawStakingToken', contractController.withdrawStakingToken);
     /**
     * @typedef purchaseTokens
     * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
+    * @property {number} amount.required - Add amount - eg: 1
     */
     /**
     * @route POST /api/tron/purchaseTokens

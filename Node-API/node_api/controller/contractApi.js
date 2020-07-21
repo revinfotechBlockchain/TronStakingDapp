@@ -1193,12 +1193,17 @@ module.exports = {
             tronWeb.setDefaultBlock('latest');
             var newContract = await tronWeb.contract().at('TDhrCQvg6qDV9ikQ6WUqGVd9gJimtWurdL');
 
-                await newContract && newContract.purchaseTokens().send(1).then(async output => {
-                res.send(output);
-                }).catch(err => {
-                    let response = {status:false, message:"Unable to purchase token, Please Try Again!!!"};
-                    res.send(response);
-                });
+            if(req.body.amount && !req.body.amount== "" && ! req.body.amount == 0 ){
+                await newContract && newContract.purchaseTokens().send({callValue : req.body.amount * 1000000}).then(async output => {
+                    res.send(output);
+                    }).catch(err => {
+                        let response = {status:false, message:"Unable to purchase token, Please Try Again!!!"};
+                        res.send(response);
+                    });
+            } else {
+                let response = {status:false, message:"Enter Valid Amount & Try Again!!!"};
+                res.send(response);
+            }  
         } else {
             let response = {status:false, message:"Enter Valid Private Key & Try Again!!!"};
             res.send(response);
