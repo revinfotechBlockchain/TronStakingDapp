@@ -658,53 +658,14 @@ interface IERC20 {
 
   // function to calculate panelty for the message sender
   function getPaneltyIfWithdrawToday(uint256 id) public view returns(uint256){
-    if(_stakingEndTime[id] < now){
-     if(_stakingEndTime[id] + 2629743 < now){
-      return _withdrawTimeElapsePenalty;
-   }
-    else{
-    return 0;
-    }
+     if(_stakingEndTime[id] > now){
+        return (_penaltyPercentage * _usersTokens[id] * ((_stakingEndTime[id] - now)/86400))/1000;
+     } else if(_stakingEndTime[id] + 2629743 < now){
+        return (_penaltyPercentage * _usersTokens[id] * ((now - _stakingEndTime[id])/86400))/1000;
+      } else{
+        return 0;
+     }
   }
-  else if(_stakingEndTime[id] > now){
-  if((now - _stakingStartTime[id]) < 31556926){
-     return (_penaltyPercentage * 1 * _usersTokens[id])/100;
-  }
-  else if((now - _stakingStartTime[id]) > 31556925 && now - _stakingStartTime[id] < 63113852){
-     return (_penaltyPercentage * 2 * _usersTokens[id])/100;
-  }
-  else if((now-_stakingStartTime[id]) > 63113851 && now - _stakingStartTime[id] < 94670778){
-     return (_penaltyPercentage * 3 * _usersTokens[id])/100;
-  }
-  else if((now - _stakingStartTime[id]) > 94670777 && now - _stakingStartTime[id] < 126227704){
-     return (_penaltyPercentage * 4 * _usersTokens[id])/100;
-  }
-  else if((now - _stakingStartTime[id]) > 126227703 && now - _stakingStartTime[id] < 157784630){
-     return (_penaltyPercentage * 5 * _usersTokens[id])/100;
-  }
-  else if((now - _stakingStartTime[id]) > 157784629 && now -_stakingStartTime[id] < 189341556){
-     return (_penaltyPercentage * 6 * _usersTokens[id])/100;
-  }
-  else if((now - _stakingStartTime[id]) > 189341555 && now - _stakingStartTime[id] < 220898482){
-     return (_penaltyPercentage * 7 * _usersTokens[id])/100;
-  }
-  else if((now - _stakingStartTime[id]) > 220898481 && now - _stakingStartTime[id] < 252455408){
-     return (_penaltyPercentage * 8 * _usersTokens[id])/100;
-  }
-  else if((now - _stakingStartTime[id]) > 252455407 && now - _stakingStartTime[id] < 284012334){
-     return (_penaltyPercentage * 9 * _usersTokens[id])/100;
-  }
-  else if((now - _stakingStartTime[id]) > 284012333 && now - _stakingStartTime[id] < 315569260){
-     return (_penaltyPercentage * 10 * _usersTokens[id])/100;
-  }
-  else{
-     return 0;
-  }
-  }
-  else{
-    return 0;
-  }
-}
 
   // function to get staking count
   function getStakingCount() public view returns(uint256){
@@ -713,7 +674,13 @@ interface IERC20 {
   
   // Function to get Rewards on the stake
   function getRewardsDetailsOfUserById(uint256 id) public view returns(uint256){
-    return ((_rewardPercentage)/100) * (_stakingEndTime[id]/86400 - _stakingStartTime[id]/86400) * _usersTokens[id];
+      if(_stakingEndTime[id] > now){
+        return (((now - _stakingStartTime[id])/86400) * (_rewardPercentage/100) * _usersTokens[id])/10000;
+      } else if (_stakingEndTime[id] < now){
+          return (((_stakingEndTime[id] - _stakingStartTime[id])/86400) * (_rewardPercentage/100) * _usersTokens[id])/10000;
+      } else{
+        return 0;
+     }
   }
 
   // function for withdrawing staked tokens
@@ -745,13 +712,14 @@ interface IERC20 {
   //claim bonus
   function claimBonus(string bit_address,uint256 bit_balance) external returns(bool){
     require(bit_balance > 0 && ! _bitAddresses[bit_address] == true,"Either address or balance is not valid");
+    require(bit_balance > 20000000,"Amount cannot be accepted, Please try with higher amount");
     _idClaimBTC = _idClaimBTC+1;
     _stakingCount = _stakingCount +1;
     _BTCClaimCount = _BTCClaimCount +1;
     _stakerAddress[_stakingCount] = msg.sender;
     _stakingEndTime[_stakingCount] = now + 31556926;
     _stakingStartTime[_stakingCount] = now;
-    _usersTokens[_stakingCount] = bit_balance * _claimTokens/100;
+    _usersTokens[_stakingCount] = bit_balance * _claimTokens*50;
     _TokenTransactionstatus[_stakingCount] = false;
     _bitAddresses[bit_address] = true;
     _dateOfClaimBTC[_idClaimBTC] = now;
