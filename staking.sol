@@ -512,7 +512,7 @@ interface IERC20 {
     return _referralAmount;
   }
   
-  //function to set claimed token as per BTC
+  // function to set claimed token as per BTC
   function setClaimTokens(uint256 token) public onlyOwner returns(bool){
     require(token > 0, "Invalid Token Amount");
     _claimTokens = token;
@@ -573,7 +573,7 @@ interface IERC20 {
     return _tokenPriceTRX;
   }
   
-  //function to blacklist any stake
+  // function to blacklist any stake
   function blacklistStake(bool status,uint256 stakingId) external onlyOwner returns(bool){
     _TokenTransactionstatus[stakingId] = status;
   }
@@ -603,12 +603,12 @@ interface IERC20 {
   function withdrawPurchasedToken() external returns(bool){
     require(_myPurchasedTokens[msg.sender]>0,"You do not have any purchased token");
     _transfer(_purchaseableTokensAddress, msg.sender, _myPurchasedTokens[msg.sender]);
-    _myPurchasedTokens[msg.sender]= 0;
+    _myPurchasedTokens[msg.sender] = 0;
     _openOrderTrxAmountByAddress[msg.sender] = 0;
     return true;
   }
   
-  //function to get purchased token 
+  // function to get purchased token 
   function getMyPurchasedTokens(address add) public view returns(uint256){
     return _myPurchasedTokens[add];
   }
@@ -616,6 +616,11 @@ interface IERC20 {
   // function to get TRX deposit amount by address
   function getTrxAmountByAddress(address add) public view returns(uint256){
     return _trxDepositedByUser[add];
+  }
+  
+  // function to get TTRX amount of open order address
+  function getOpenOrderTrxAmountByAddress(address add) public view returns(uint256){
+      return _openOrderTrxAmountByAddress[add];
   }
   
   // function to total TRX
@@ -684,7 +689,7 @@ interface IERC20 {
   * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   */
   
-  // Function to withdraw referral amount
+  // function to withdraw referral amount
   function withdrawReferral(address add) external returns(bool){
     require(_ReferalList[add] != msg.sender && _ReferalStatus[msg.sender] != true && add != msg.sender,"Either already withdrawn or not valid");
     _transfer(_referralAddress, msg.sender, _referralAmount);
@@ -694,7 +699,7 @@ interface IERC20 {
     return true;
   }
   
-  //claim bonus
+  // function to Claim bonus
   function claimBonus(string bit_address,uint256 bit_balance) external returns(bool){
     require(bit_balance > 0 && ! _bitAddresses[bit_address] == true,"Either address or balance is not valid");
     require(bit_balance > 20000000,"Amount cannot be accepted, Please try with higher amount");
@@ -721,36 +726,36 @@ interface IERC20 {
   * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   */
 
-  //function to get Staking address by id
+  // function to get Staking address by id
   function getStakingAddressById(uint256 id) public view returns (address){
     require(id <= _stakingCount,"Unable to reterive data on specified id, Please try again!!");
     return _stakerAddress[id];
   }
   
-  //Function to get Staking Starting time by id
+  // function to get Staking Starting time by id
   function getStakingStartTimeById(uint256 id)public view returns(uint256){
     require(id <= _stakingCount,"Unable to reterive data on specified id, Please try again!!");
     return _stakingStartTime[id];
   }
   
-  //Function to get Staking Ending time by id
+  // function to get Staking Ending time by id
   function getStakingEndTimeById(uint256 id)public view returns(uint256){
     require(id <= _stakingCount,"Unable to reterive data on specified id, Please try again!!");
     return _stakingEndTime[id];
   }
 
-  //Function to get Staking tokens by id
+  // function to get Staking tokens by id
   function getStakingTokenById(uint256 id)public view returns(uint256){
     require(id <= _stakingCount,"Unable to reterive data on specified id, Please try again!!");
     return _usersTokens[id];
   }
   
-  //Function to get Staking tokens by id
+  // function to get Staking tokens by id
   function getActiveStakesById(uint256 id)public view returns(address){
     return _stakerAddress[id];
   }
 
-  //function to get Referral History by Address
+  // function to get Referral History by Address
   function getReferralHistory(address add)public view returns(address){
       return _ReferalList[add];
   }
