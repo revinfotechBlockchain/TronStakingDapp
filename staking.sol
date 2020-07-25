@@ -398,9 +398,6 @@ interface IERC20 {
   // Penalty Percentage
   uint256 private _penaltyPercentage;
   
-  // Withdraw Penalty
-  uint256 private _withdrawTimeElapsePenalty;
-
   // penalty amount after staking time
   uint256 private _penaltyAmountAfterStakingTime;
   
@@ -419,7 +416,7 @@ interface IERC20 {
   // variable for BigPayDay Percentage
   uint256 private _bigPayDayPercentage = 100;
   
-  // variable for Total ETH
+  // variable for Total TRX
   uint256 private _totalTrx;
   
   // variable to track count of BTC Claimed
@@ -489,18 +486,6 @@ interface IERC20 {
   // function for getting penalty percentage by owner
   function getPenaltyPercentage() public view returns(uint256){
      return _penaltyPercentage;
-  }
-
-  // function for setting withdraw penalty percentage percentage by owner
-  function setWithdrawPenaltyPercentage(uint256 withdrawPenalty) public onlyOwner returns(bool){
-    require(withdrawPenalty > 0, "Invalid Percentage");
-    _withdrawTimeElapsePenalty = withdrawPenalty;
-    return true;
-  }
- 
-  // function for getting withdraw penalty percentage by owner
-  function getWithdrawPenaltyPercentage() public view returns(uint256){
-    return _withdrawTimeElapsePenalty;
   }
   
   // function to set Referral Address
@@ -607,7 +592,7 @@ interface IERC20 {
   
   // function to perform purchased token
   function purchaseTokens() external payable payableCheck returns(bool){
-    _myPurchasedTokens[msg.sender] = _myPurchasedTokens[msg.sender] + msg.value * _tokenPriceTRX/100;
+    _myPurchasedTokens[msg.sender] = _myPurchasedTokens[msg.sender] + msg.value * _tokenPriceTRX;
     _openOrderTrxAmountByAddress[msg.sender] = msg.value;
     _totalTrx = _totalTrx +msg.value;
     _trxDepositedByUser[msg.sender] = msg.value;
@@ -656,6 +641,11 @@ interface IERC20 {
     return true;
   }
 
+  // function to get staking count
+  function getStakingCount() public view returns(uint256){
+      return _stakingCount;
+  }
+  
   // function to calculate panelty for the message sender
   function getPaneltyIfWithdrawToday(uint256 id) public view returns(uint256){
      if(_stakingEndTime[id] > now){
@@ -665,11 +655,6 @@ interface IERC20 {
       } else{
         return 0;
      }
-  }
-
-  // function to get staking count
-  function getStakingCount() public view returns(uint256){
-      return _stakingCount;
   }
   
   // Function to get Rewards on the stake
