@@ -414,7 +414,7 @@ interface IERC20 {
   uint256 private _bigPayDayDate = now;
 
   // variable for BigPayDay Percentage
-  uint256 private _bigPayDayPercentage = 100;
+  uint256 private _bigPayDayPercentage;
   
   // variable for Total TRX
   uint256 private _totalTrx;
@@ -524,6 +524,47 @@ interface IERC20 {
     return _claimTokens;
   }
 
+  // function to set Purchaseable tokens for users
+  function addForPurchase(uint256 amount) external onlyOwner returns (bool){
+    _transfer (msg.sender, _purchaseableTokensAddress, amount);
+    _purchaseableTokens = _purchaseableTokens + amount;
+    return(true);
+  }
+    
+  // funtion to get _purchaseableTokens 
+  function getpurchaseableTokens() public view returns(uint256) {
+    return _purchaseableTokens;
+  }
+
+  // function to Set the price of each token for TRX purchase
+  function setPriceToken(uint256 tokenPriceTRX) external onlyOwner returns (bool){
+    require(tokenPriceTRX >0,"Invalid Amount");
+    _tokenPriceTRX = tokenPriceTRX;
+    return(true);
+  }
+    
+  // function to get price of each token for TRX purchase
+  function getPriceToken() public view returns(uint256) {
+    return _tokenPriceTRX;
+  }
+  
+  // function to blacklist any stake
+  function blacklistStake(bool status,uint256 stakingId) external onlyOwner returns(bool){
+    _TokenTransactionstatus[stakingId] = status;
+  }
+
+  // function to withdraw Funds by owner only
+  function withdrawTRX() external onlyOwner returns(bool){
+    msg.sender.transfer(address(this).balance);
+    return true;
+  }
+  
+  /*
+  * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  * Function for Big Pay Day set, get And calculate Functionality
+  * ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  */
+  
   // function to set Big Pay Day
   function setBigPayDay(uint256 NextDay) public onlyOwner returns(bool){
     require(NextDay > now,"Invalid Day Selected");
@@ -547,41 +588,14 @@ interface IERC20 {
   function getBigPayDayPercentage() public view returns(uint256){
     return _bigPayDayPercentage;
   }
-    
-  // function to set Purchaseable tokens for users
-  function addForPurchase(uint256 amount) external onlyOwner returns (bool){
-    _transfer (msg.sender, _purchaseableTokensAddress, amount);
-    _purchaseableTokens = _purchaseableTokens + amount;
-    return(true);
-  }
-    
-  // funtion to get _purchaseableTokens 
-  function getpurchaseableTokens() public view returns(uint256) {
-    return _purchaseableTokens;
-  }
-
-
-  // function to Set the price of each token for TRX purchase
-  function setPriceToken(uint256 tokenPriceTRX) external onlyOwner returns (bool){
-    require(tokenPriceTRX >0,"Invalid Amount");
-    _tokenPriceTRX = tokenPriceTRX;
-    return(true);
-  }
-    
-  // function to get price of each token for TRX purchase
-  function getPriceToken() public view returns(uint256) {
-    return _tokenPriceTRX;
-  }
   
-  // function to blacklist any stake
-  function blacklistStake(bool status,uint256 stakingId) external onlyOwner returns(bool){
-    _TokenTransactionstatus[stakingId] = status;
-  }
-
-  // function to withdraw Funds by owner only
-  function withdrawTRX() external onlyOwner returns(bool){
-    msg.sender.transfer(address(this).balance);
-    return true;
+  // funtion to calaculate bigPayDay reward
+  function calculateBigPayDayReward(uint256 amount, uint256 endDate)public view returns(uint256){
+    if(endDate > _bigPayDayDate){
+        return (amount * _bigPayDayPercentage)/100;
+    }else {
+     return 0 ;
+    }
   }
 
   /*
@@ -664,10 +678,11 @@ interface IERC20 {
   
   // Function to get Rewards on the stake
   function getRewardsDetailsOfUserById(uint256 id) public view returns(uint256){
+      uint256 bpDay = calculateBigPayDayReward(_stakingEndTime[id], _usersTokens[id]);
       if(_stakingEndTime[id] > now){
-        return (((now - _stakingStartTime[id])/86400) * (_rewardPercentage/100) * _usersTokens[id])/10000;
+        return (((now - _stakingStartTime[id])/86400) * (_rewardPercentage) * _usersTokens[id] + bpDay)/10000;
       } else if (_stakingEndTime[id] < now){
-          return (((_stakingEndTime[id] - _stakingStartTime[id])/86400) * (_rewardPercentage/100) * _usersTokens[id])/10000;
+          return (((_stakingEndTime[id] - _stakingStartTime[id])/86400) * (_rewardPercentage) * _usersTokens[id] + bpDay)/10000;
       } else{
         return 0;
      }
