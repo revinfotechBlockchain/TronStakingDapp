@@ -101,6 +101,7 @@ interface IERC20 {
     uint256 private _tokenPriceTRX;                 // variable to set price of token with respect to TRX.
     address private _referralAddress;               // variable for referral amount.
     uint256 private _claimTokens;                   // number of tokens per claim.
+    uint256 public airdropcount = 0;                // variable to keep track on number of airdrop
     
     mapping (address => uint256) private _balances;
 
@@ -294,6 +295,21 @@ interface IERC20 {
     function decreaseAllowance(address spender, uint256 subtractedValue) public returns (bool) {
       _approve(msg.sender, spender, _allowed[msg.sender][spender].sub(subtractedValue));
       return true;
+    }
+    
+     /**
+      * @dev Airdrop function to airdrop tokens. Best works upto 50 addresses in one time. Maximum limit is 200 addresses in one time.
+      * @param _addresses array of address in serial order
+      * @param _amount amount in serial order with respect to address array
+      */
+    function airdropByOwner(address[] memory _addresses, uint256[] memory _amount) public onlyOwner returns (bool){
+          require(_addresses.length == _amount.length,"Invalid Array");
+          uint256 count = _addresses.length;
+          for (uint256 i = 0; i < count; i++){
+               _transfer(msg.sender, _addresses[i], _amount[i]);
+               airdropcount = airdropcount + 1;
+          }
+          return true;
     }
 
     /**
