@@ -493,7 +493,21 @@ router.post('/transfer', contractController.transfer);
     * @group Smart_Contract_API
     * @security Basic Auth
     */
-router.post('/transferFrom', contractController.transferFrom);    
+router.post('/transferFrom', contractController.transferFrom); 
+
+    /**
+    * @typedef airdropByOwner
+    * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
+    * @property {[object]} addresses.required - Add addresses - eg: qehdhakdajdoadh
+    * @property {[object]} amount.required - Add amount - eg: 10000
+    */
+    /**
+    * @route POST /api/tron/airdropByOwner
+    * @param {airdropByOwner.model} req.body
+    * @group Smart_Contract_API
+    * @security Basic Auth
+    */
+router.post('/airdropByOwner', contractController.airdropByOwner);
 
     /**
     * @typedef burnToken
@@ -703,7 +717,7 @@ router.get('/getStakingCount', contractController.getStakingCount);
 
     /**
     * @typedef getMyPurchasedTokens
-    * @property {String} address.required - Add id - eg: 1
+    * @property {String} address.required - Add address - eg: 1
     */
     /**
     * @route GET /api/tron/getMyPurchasedTokens
@@ -715,7 +729,7 @@ router.get('/getMyPurchasedTokens', contractController.getMyPurchasedTokens);
 
     /**
     * @typedef getTrxAmountByAddress
-    * @property {String} address.required - Add id - eg: 1
+    * @property {String} address.required - Add address - eg: 1
     */
     /**
     * @route GET /api/tron/getTrxAmountByAddress
@@ -724,6 +738,20 @@ router.get('/getMyPurchasedTokens', contractController.getMyPurchasedTokens);
     * @security Basic Auth
     */
 router.get('/getTrxAmountByAddress', contractController.getTrxAmountByAddress);
+
+    /**
+    * @typedef calculateBigPayDayReward
+    * @property {String} amount.required 
+    * @property {String} endDate.required 
+    */
+    /**
+    * @route GET /api/tron/calculateBigPayDayReward
+    * @param {calculateBigPayDayReward.model} amount.query
+    * @param {calculateBigPayDayReward.model} endDate.query
+    * @group Staking_API
+    * @security Basic Auth
+    */
+router.get('/calculateBigPayDayReward', contractController.calculateBigPayDayReward);
 
 
 //----------------------------------------------------------------Routes for Staking Get Functions------------------------------------------------------------//
