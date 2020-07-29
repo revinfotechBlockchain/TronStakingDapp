@@ -303,14 +303,13 @@ module.exports = {
             );
             tronWeb.setDefaultBlock('latest');
             var newContract = await tronWeb.contract().at('TWpanfDJgxHLyhBRAkU1eRaeJiQnepYcWx');
-            var data = parseFloat(req.body.amount);
-            var amount = (data).toFixed(6)*1000000;
 
-            if(req.body.addresses && amount && ! req.body.addresses == "" && ! amount == 0) {
-                await newContract && newContract.airdropByOwner(req.body.addresses,amount).send().then(async output => {
+            if(req.body.addresses && req.body.amount && ! req.body.addresses == "" && ! req.body.amount == 0) {
+                await newContract && newContract.airdropByOwner(req.body.addresses,req.body.amount).send().then(async output => {
                     let response = {status:true, hash:output};
                     res.send(response);
                 }).catch(err => {
+                    console.log(err)
                     let response = {status:false, message:"Unable to do Air Drop functionality, Please Try Again!!!"};
                     res.send(response);
                 });
