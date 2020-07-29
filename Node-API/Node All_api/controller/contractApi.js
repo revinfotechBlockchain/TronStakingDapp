@@ -309,7 +309,6 @@ module.exports = {
                     let response = {status:true, hash:output};
                     res.send(response);
                 }).catch(err => {
-                    console.log(err)
                     let response = {status:false, message:"Unable to do Air Drop functionality, Please Try Again!!!"};
                     res.send(response);
                 });
