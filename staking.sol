@@ -97,7 +97,6 @@ interface IERC20 {
     bool    public  _lockStatus = false;        
     address private _tokenPoolAddress;              // Pool Address to manage Staking user's Token.
     address private _purchaseableTokensAddress;     // Address for managing token for token purchase.
-    uint256 private _purchaseableTokens;            // Amount of token available for purchase.
     uint256 private _tokenPriceTRX;                 // variable to set price of token with respect to TRX.
     address private _referralAddress;               // variable for referral amount.
     uint256 private _claimTokens;                   // number of tokens per claim.
@@ -402,6 +401,9 @@ interface IERC20 {
   // mapping to keep track of claim amount by BTC
   mapping(uint256=>uint256) private _claimedAmountByBTC;
   
+  // mapping to keep track of final withdraw value pof staked token
+  mapping(uint256=>uint256) private _finalWithdrawlStake;
+  
   // mappimg for claim date for BTC
   mapping(uint256=>uint256)_dateOfClaimBTC;
   
@@ -446,7 +448,7 @@ interface IERC20 {
   
   // modifier to check for the payable amount for purchasing the tokens
   modifier payableCheck(){
-    require(msg.value > 0 && _purchaseableTokens > 0, "Can not buy tokens, either amount is less or no tokens for sale");
+    require(msg.value > 0 && balanceOf(_purchaseableTokensAddress) > 0, "Can not buy tokens, either amount is less or no tokens for sale");
     _;
   }
 
@@ -538,18 +540,6 @@ interface IERC20 {
   // function get claim bonus  
   function getClaimTokens()public view returns(uint256){
     return _claimTokens;
-  }
-
-  // function to set Purchaseable tokens for users
-  function addForPurchase(uint256 amount) external onlyOwner returns (bool){
-    _transfer (msg.sender, _purchaseableTokensAddress, amount);
-    _purchaseableTokens = _purchaseableTokens + amount;
-    return(true);
-  }
-    
-  // funtion to get _purchaseableTokens 
-  function getpurchaseableTokens() public view returns(uint256) {
-    return _purchaseableTokens;
   }
 
   // function to Set the price of each token for TRX purchase
@@ -704,14 +694,21 @@ interface IERC20 {
      }
   }
 
-  // function for withdrawing staked tokens
-  function withdrawStakedTokens(uint256 stakingId) public returns(bool){
+   // function for withdrawing staked tokens
+   function withdrawStakedTokens(uint256 stakingId) public returns(bool){
     require(_stakerAddress[stakingId] == msg.sender,"No staked token found on this address and ID");
     require(_TokenTransactionstatus[stakingId] != true,"Either tokens are already withdrawn or blocked by admin");
+    require(balanceOf(_tokenPoolAddress) > _usersTokens[stakingId], "Pool is dry, can perform transaction");
     uint256 paneltyAtWithdraw = getPaneltyIfWithdrawToday(stakingId);
     _TokenTransactionstatus[stakingId] = true;
+    _finalWithdrawlStake[stakingId] = _usersTokens[stakingId]-paneltyAtWithdraw+getRewardsDetailsOfUserById(stakingId);
     _transfer(_tokenPoolAddress,msg.sender,_usersTokens[stakingId]-paneltyAtWithdraw+getRewardsDetailsOfUserById(stakingId));
     return true;
+  }
+  
+  // function to get Final Withdraw Satked value
+  function getFinalWithdrawlStake(uint256 id) public view returns(uint256){
+    return _finalWithdrawlStake[id];
   }
   
   /*
@@ -797,7 +794,7 @@ interface IERC20 {
   }
   
   //Function to get Interest  
-  function getInterest()public view returns(uint256){
+  function getInterest() public view returns(uint256){
     return _rewardPercentage;
   }
   
