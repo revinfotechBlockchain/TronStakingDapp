@@ -592,16 +592,6 @@ router.get('/getTokenpoolAddress', contractController.getTokenpoolAddress);
 router.get('/getPurchaseableTokenAddress', contractController.getPurchaseableTokenAddress);                                    
 
     /**
-    * @typedef getPurchaseableTokens
-    */
-    /**
-    * @route GET /api/tron/getPurchaseableTokens
-    * @group Staking_API
-    * @security Basic Auth
-    */
-router.get('/getPurchaseableTokens', contractController.getPurchaseableTokens);
-
-    /**
     * @typedef getPriceOfToken
     */
     /**
@@ -753,6 +743,18 @@ router.get('/getTrxAmountByAddress', contractController.getTrxAmountByAddress);
     */
 router.get('/calculateBigPayDayReward', contractController.calculateBigPayDayReward);
 
+    /**
+    * @typedef getFinalWithdrawlStake
+    * @property {number} id.required - Add id - eg: 1
+    */
+    /**
+    * @route GET /api/tron/getFinalWithdrawlStake
+    * @param {getFinalWithdrawlStake.model} id.query
+    * @group Staking_API
+    * @security Basic Auth
+    */
+router.get('/getFinalWithdrawlStake', contractController.getFinalWithdrawlStake);
+
 
 //----------------------------------------------------------------Routes for Staking Get Functions------------------------------------------------------------//
 
@@ -807,19 +809,6 @@ router.post('/setTokenPoolAddress', contractController.setTokenPoolAddress);
     * @security Basic Auth
     */
 router.post('/setpurchaseableTokenAddress', contractController.setpurchaseableTokenAddress); 
-
-    /**
-    * @typedef setPurchaseableTokens
-    * @property {String} privateKey.required - Add privateKey - eg: XdAUmwtig27HBG6WfYyHAzP8n6XC9jESEw
-    * @property {String} amount.required - Add amount - eg: 10000
-    */
-    /**
-    * @route POST /api/tron/setPurchaseableTokens
-    * @param {setPurchaseableTokens.model} req.body
-    * @group Staking_API
-    * @security Basic Auth
-    */
-router.post('/setPurchaseableTokens', contractController.setPurchaseableTokens);
 
     /**
     * @typedef setPriceOfToken
